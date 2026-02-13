@@ -10,6 +10,12 @@
 #   $(atem:*)                - ATEM state variables
 #
 # Custom variables defined here supplement the built-in ones.
+#
+# In Companion, custom variables are referenced as:
+#   $(internal:custom_<name>)
+# For example: $(internal:custom_startup_status), $(internal:custom_service_day)
+#
+# These variables are displayed on the Home page (Page 1, Row 2) for at-a-glance status.
 
 custom_variables:
 

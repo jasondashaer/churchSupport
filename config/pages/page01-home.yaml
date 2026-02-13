@@ -277,6 +277,21 @@ buttons:
     feedbacks: []
     notes: "Current time display using Companion internal variable"
 
+  - position: [2, 1]
+    style:
+      text_top: "$(internal:custom_service_day)"
+      text_bottom: "サービス"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: |
+      Displays current service type (sunday/midweek) from custom variable.
+      Variable set by startup scripts or manually.
+      See config/variables.yaml for service_day definition.
+
   - position: [2, 2]
     style:
       text_top: "LIVE"
@@ -312,6 +327,50 @@ buttons:
           color_bg: "#CC0000"
           color_text: "#FFFFFF"
     notes: "Shows red when OBS is recording"
+
+  - position: [2, 5]
+    style:
+      text_top: "$(internal:custom_service_phase)"
+      text_bottom: "進行"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: |
+      Displays current service phase (pre, worship, sermon, etc.) from custom variable.
+      Optional feature - useful for tracking service progress.
+      See config/variables.yaml for service_phase definition.
+
+  - position: [2, 7]
+    style:
+      text_top: "$(internal:custom_startup_status)"
+      text_bottom: "状態"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "internal"
+        feedback: "variable_value"
+        options:
+          variable: "startup_status"
+          value: "COMPLETE"
+        style_when_true:
+          color_bg: "#00CC00"
+      - connection: "internal"
+        feedback: "variable_value"
+        options:
+          variable: "startup_status"
+          value: "ERROR"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: |
+      Displays startup_status variable value with color feedback.
+      Green when COMPLETE, Red when ERROR, default gray otherwise.
+      See config/variables.yaml for startup_status definition.
 
   # === ROW 3: Navigation + Emergency ===
 

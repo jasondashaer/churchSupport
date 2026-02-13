@@ -84,6 +84,31 @@ Every page (1-10) has an identical bottom row (row 3) layout:
 
 **Why not auto-start?** Automatic time-based startup is possible via Companion triggers but is deferred to Phase 2. Manual startup ensures a human is present and aware that systems are coming online.
 
+## Documentation Language Strategy
+
+**Chosen approach**: English-primary documentation with a Japanese setup guide for the core deployment workflow.
+
+- `docs/SETUP-GUIDE-EN.md` — English (primary, most detailed)
+- `docs/セットアップガイド.md` — Japanese (complete setup guide translation)
+- `docs/OPERATOR-QUICK-REFERENCE.md` — Bilingual (used during services by Japanese-speaking volunteers)
+- `docs/TROUBLESHOOTING.md` — Bilingual section headers for emergency reference
+
+**Rationale**: Technical documentation (module names, Companion UI labels, API actions) is English-native, so English remains the primary language for builder-facing docs. However, the setup guide is translated to Japanese since the church is in Japan and local volunteers may lead future deployments. The operator quick reference is bilingual because it is used in real-time during services.
+
+## Custom Variables on Home Page
+
+The Home page (Page 1, Row 2) displays three custom Companion variables alongside live status indicators:
+
+| Position | Variable | Purpose |
+|----------|----------|---------|
+| [2,0] | `$(internal:time_hms)` | Current time (built-in) |
+| [2,1] | `$(internal:custom_service_day)` | Service type: sunday / midweek |
+| [2,2]-[2,3] | OBS streaming/recording | Live status feedback (built-in) |
+| [2,5] | `$(internal:custom_service_phase)` | Service phase: pre, worship, sermon, etc. |
+| [2,7] | `$(internal:custom_startup_status)` | System status with color feedback |
+
+**Rationale**: At-a-glance status is critical on the Home page since all volunteers pass through it. The `startup_status` variable turns green when all systems are online and red on error, providing immediate visual confirmation. The `service_day` and `service_phase` variables help volunteers confirm they have the right presets loaded.
+
 ## Open Questions Strategy
 
 All unknowns are handled with three mechanisms:

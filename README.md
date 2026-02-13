@@ -23,18 +23,19 @@ config/
   pages/
     page01-home.yaml        # Role selector + startup/shutdown
     page02-slides-core.yaml # Slides - core controls
-    page03-slides-ext.yaml  # Slides - extended
-    page04-audio-core.yaml  # Audio - core controls
-    page05-audio-ext.yaml   # Audio - extended
-    page06-camera-core.yaml # Camera - core controls
-    page07-camera-ext.yaml  # Camera - extended
-    page08-stream-core.yaml # Streaming - core controls
-    page09-stream-ext.yaml  # Streaming - extended
+    page03-slides-extended.yaml # Slides - extended
+    page04-audio-core.yaml      # Audio - core controls
+    page05-audio-extended.yaml  # Audio - extended
+    page06-camera-core.yaml     # Camera - core controls
+    page07-camera-extended.yaml # Camera - extended
+    page08-stream-core.yaml     # Streaming - core controls
+    page09-stream-extended.yaml # Streaming - extended
     page10-emergency.yaml   # Emergency / panic
   variables.yaml            # Custom Companion variables
   triggers.yaml             # Automated triggers
 docs/
   SETUP-GUIDE-EN.md         # English setup guide
+  セットアップガイド.md       # Japanese setup guide / 日本語セットアップガイド
   IP-CONFIGURATION.md       # Network configuration template
   TESTING-CHECKLIST.md      # Verification steps
   TROUBLESHOOTING.md        # Common issues and solutions
@@ -54,7 +55,7 @@ scripts/
 
 1. Install [Bitfocus Companion](https://bitfocus.io/companion) v4.2+
 2. Connect Stream Deck XL via USB
-3. Follow `docs/SETUP-GUIDE-EN.md` to build the configuration
+3. Follow `docs/SETUP-GUIDE-EN.md` (English) or `docs/セットアップガイド.md` (日本語) to build the configuration
 4. Update IP addresses per `docs/IP-CONFIGURATION.md`
 5. Test with `docs/TESTING-CHECKLIST.md`
 6. Export `.companionconfig` for deployment

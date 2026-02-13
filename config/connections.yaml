@@ -1,0 +1,133 @@
+# Bitfocus Companion - Connection Definitions
+# All module connections for the church Stream Deck configuration
+#
+# PLACEHOLDER IPs: All IPs use 192.168.1.XXX pattern.
+# Update these with actual addresses during on-site deployment.
+# See docs/IP-CONFIGURATION.md for details.
+#
+# Target: Companion v4.2.4+
+
+meta:
+  companion_version: "4.2"
+  last_updated: "2026-02-09"
+  author: "Church Tech Team"
+
+connections:
+
+  # === Primary AV Systems ===
+
+  - id: propresenter
+    module: "renewedvision-propresenter"
+    label: "ProPresenter"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+      port: 20404
+    notes:
+      - "OPEN QUESTION: ProPresenter version - if >= 7.9, switch module to renewedvision-propresenter-api"
+      - "OPEN QUESTION: IP address of ProPresenter computer"
+      - "OPEN QUESTION: Is ProPresenter on the same machine as Companion?"
+      - "Legacy module uses TCP port 20404 (configure in PP Preferences > Network)"
+      - "API module (v7.9+) uses HTTP, different port configuration"
+
+  - id: obs
+    module: "obs-studio"
+    label: "OBS Studio"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+      port: 4455
+      password: ""
+    notes:
+      - "OPEN QUESTION: IP address of OBS computer"
+      - "OPEN QUESTION: OBS WebSocket password (leave blank if auth disabled)"
+      - "Requires OBS 28+ for WebSocket v5 protocol"
+      - "Enable in OBS: Tools > WebSocket Server Settings"
+
+  - id: atem
+    module: "bmd-atem"
+    label: "ATEM Switcher"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+    notes:
+      - "OPEN QUESTION: ATEM model (Mini, Mini Pro, TV Studio, 1 M/E, etc.)"
+      - "OPEN QUESTION: IP address (ATEM Mini default: 192.168.10.240)"
+      - "OPEN QUESTION: Input assignments (which camera on which input)"
+      - "Firmware must be >= 7.5.2"
+      - "Network connection required - USB control NOT supported by Companion"
+      - "Model auto-detected on connection"
+
+  - id: yamaha
+    module: "yamaha-rcp"
+    label: "Yamaha TF1"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+      port: 49280
+      model: "TF1"
+    notes:
+      - "OPEN QUESTION: IP address of TF1"
+      - "OPEN QUESTION: Channel assignment map (which mic/instrument on which channel)"
+      - "OPEN QUESTION: Scene numbers for Sunday/Midweek presets"
+      - "Requires hardware connection - does NOT work with TF Editor alone"
+      - "RCP protocol on TCP port 49280"
+      - "TF1 has 16 input channels + stereo out + 20 AUX/bus/matrix"
+
+  # === Startup/Shutdown Support ===
+
+  - id: wol
+    module: "generic-pingandwake"
+    label: "Wake-on-LAN"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+      mac: "XX:XX:XX:XX:XX:XX"
+    notes:
+      - "OPEN QUESTION: MAC address(es) of computers to wake"
+      - "OPEN QUESTION: Are computers configured for WOL in BIOS/UEFI?"
+      - "Pings host; if not alive, sends WOL magic packet"
+      - "May need one instance per computer if PP and OBS are on separate machines"
+      - "Supports MAC address auto-discovery via ARP lookup"
+
+  - id: ssh
+    module: "generic-ssh"
+    label: "SSH Remote Control"
+    enabled: true
+    config:
+      host: "192.168.1.XXX"
+      port: 22
+      username: ""
+      password: ""
+    notes:
+      - "OPEN QUESTION: SSH credentials for remote machines"
+      - "OPEN QUESTION: Do target computers have SSH enabled?"
+      - "OPEN QUESTION: What OS do the computers run? (affects shutdown command)"
+      - "Used for remote shutdown commands and app launching"
+      - "May need one instance per remote machine"
+
+  # === Optional / TBD ===
+
+  - id: display
+    module: "TBD"
+    label: "TV/Display Control"
+    enabled: false
+    config:
+      host: "192.168.1.XXX"
+    notes:
+      - "OPEN QUESTION: TV/display brand and model"
+      - "Module options: samsung-display, lgtv-display, generic-tcp-serial (RS-232)"
+      - "Some displays support WOL for power-on"
+      - "Enable this connection once display model is confirmed"
+
+  - id: pdu
+    module: "TBD"
+    label: "Smart Outlet / PDU"
+    enabled: false
+    config:
+      host: "192.168.1.XXX"
+    notes:
+      - "OPEN QUESTION: Are smart outlets or a PDU in use? Brand/model?"
+      - "Module options: synaccess-netbooter, cyberpower-pdu, netio"
+      - "Used for powering on/off equipment without network standby"
+      - "Enable this connection once PDU/outlet model is confirmed"

@@ -1,0 +1,397 @@
+# Page 4: Audio - Core Controls / 音響基本操作
+# Yamaha TF1 control for the Audio/Sound volunteer
+#
+# Core controls: key channel mutes, scene recall, master level indicator.
+# Most channel assignments are OPEN QUESTIONS until TF1 setup is confirmed.
+
+page:
+  number: 4
+  name: "Audio - Core"
+  name_jp: "音響基本"
+  description: "Core Yamaha TF1 controls for the audio volunteer"
+  role: "audio"
+  primary_connection: "yamaha"
+
+buttons:
+
+  # === ROW 0: Page Header + Master Status ===
+
+  - position: [0, 0]
+    style:
+      text_top: "AUDIO"
+      text_bottom: "音響"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Page title indicator"
+
+  - position: [0, 3]
+    style:
+      text_top: "Master"
+      text_bottom: "マスター"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#CC0000"
+          text_top: "MUTED"
+          text_bottom: "ミュート中"
+        style_when_false:
+          color_bg: "#00CC00"
+          text_top: "LIVE"
+          text_bottom: "ライブ"
+    notes: "Master output status indicator. Shows LIVE (green) or MUTED (red)."
+
+  - position: [0, 6]
+    style:
+      text_top: "TF1"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "TF1 connection status indicator"
+
+  # === ROW 1: Key Channel Mute/Unmute Toggles ===
+
+  - position: [1, 0]
+    style:
+      text_top: "Pastor"
+      text_bottom: "牧師マイク"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/001"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/001"
+        style_when_true:
+          color_bg: "#CC0000"
+          text_top: "Pastor"
+          text_bottom: "ミュート"
+        style_when_false:
+          color_bg: "#00CC00"
+          text_top: "Pastor"
+          text_bottom: "牧師マイク"
+    notes: "OPEN QUESTION: Pastor mic channel number (assumed Ch 1)"
+
+  - position: [1, 1]
+    style:
+      text_top: "Worship"
+      text_bottom: "賛美リード"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/002"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/002"
+        style_when_true:
+          color_bg: "#CC0000"
+          text_top: "Worship"
+          text_bottom: "ミュート"
+        style_when_false:
+          color_bg: "#00CC00"
+          text_top: "Worship"
+          text_bottom: "賛美リード"
+    notes: "OPEN QUESTION: Worship leader mic channel (assumed Ch 2)"
+
+  - position: [1, 2]
+    style:
+      text_top: "Vocal 3"
+      text_bottom: "ボーカル3"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/003"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/003"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Channel 3 assignment"
+
+  - position: [1, 3]
+    style:
+      text_top: "Vocal 4"
+      text_bottom: "ボーカル4"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/004"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/004"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Channel 4 assignment"
+
+  - position: [1, 5]
+    style:
+      text_top: "Playback"
+      text_bottom: "再生"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/015"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/015"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Playback/backing tracks channel (assumed Ch 15)"
+
+  - position: [1, 7]
+    style:
+      text_top: "Master"
+      text_bottom: "マスター"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "stereo_out"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+          text_top: "MUTED"
+          text_bottom: "全ミュート"
+        style_when_false:
+          color_bg: "#00CC00"
+          text_top: "Master"
+          text_bottom: "マスター"
+    notes: "Master output mute toggle"
+
+  # === ROW 2: Scene Recall + DCA Groups ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Worship"
+      text_bottom: "賛美シーン"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_recall"
+          options:
+            scene: 1
+    feedbacks: []
+    notes: "OPEN QUESTION: TF1 scene number for Worship mix"
+
+  - position: [2, 1]
+    style:
+      text_top: "Sermon"
+      text_bottom: "説教シーン"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_recall"
+          options:
+            scene: 2
+    feedbacks: []
+    notes: "OPEN QUESTION: TF1 scene number for Sermon mix"
+
+  - position: [2, 2]
+    style:
+      text_top: "Prayer"
+      text_bottom: "祈りシーン"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_recall"
+          options:
+            scene: 3
+    feedbacks: []
+    notes: "OPEN QUESTION: TF1 scene number for Prayer/quiet mix"
+
+  - position: [2, 3]
+    style:
+      text_top: "Default"
+      text_bottom: "初期設定"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_recall"
+          options:
+            scene: 100
+    feedbacks: []
+    notes: "OPEN QUESTION: TF1 default/safe scene number"
+
+  - position: [2, 7]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 5
+    feedbacks: []
+    notes: "Navigate to extended audio page (individual channels, monitors)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Home"
+      text_bottom: "◀ ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No previous page in role (page 4 is first audio page). Grayed out."
+
+  - position: [3, 2]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 5
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

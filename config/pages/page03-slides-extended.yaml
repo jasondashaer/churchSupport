@@ -1,0 +1,309 @@
+# Page 3: Slides - Extended / スライド詳細
+# Additional ProPresenter controls: timers, messages, stage display, looks
+
+page:
+  number: 3
+  name: "Slides - Extended"
+  name_jp: "スライド詳細"
+  description: "Extended ProPresenter controls: timers, messages, stage display"
+  role: "slides"
+  primary_connection: "propresenter"
+
+buttons:
+
+  # === ROW 0: Page Header ===
+
+  - position: [0, 0]
+    style:
+      text_top: "SLIDES+"
+      text_bottom: "スライド+"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+
+  # === ROW 0: Timer Controls ===
+
+  - position: [0, 2]
+    style:
+      text_top: "Timer"
+      text_bottom: "タイマー"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "start_clock"
+          options:
+            clock: 0
+    feedbacks: []
+    notes: "Start countdown timer. OPEN QUESTION: Timer index and configuration."
+
+  - position: [0, 3]
+    style:
+      text_top: "Stop"
+      text_bottom: "停止"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "stop_clock"
+          options:
+            clock: 0
+    feedbacks: []
+    notes: "Stop timer"
+
+  - position: [0, 4]
+    style:
+      text_top: "Reset"
+      text_bottom: "リセット"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "reset_clock"
+          options:
+            clock: 0
+    feedbacks: []
+    notes: "Reset timer to initial value"
+
+  # === ROW 1: Message Overlays ===
+
+  - position: [1, 0]
+    style:
+      text_top: "Show Msg"
+      text_bottom: "メッセージ表示"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "show_message"
+          options:
+            message: 0
+    feedbacks: []
+    notes: "OPEN QUESTION: Message index. Displays overlay message (e.g., service announcements)."
+
+  - position: [1, 1]
+    style:
+      text_top: "Hide Msg"
+      text_bottom: "メッセージ非表示"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "hide_message"
+          options:
+            message: 0
+    feedbacks: []
+    notes: "Hide overlay message"
+
+  - position: [1, 3]
+    style:
+      text_top: "Clr Msg"
+      text_bottom: "メッセージ消去"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_messages"
+          options: {}
+    feedbacks: []
+    notes: "Clear all messages from output"
+
+  # === ROW 1: Look Presets (PP7+) ===
+
+  - position: [1, 5]
+    style:
+      text_top: "Look 1"
+      text_bottom: "ルック1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "pro7_set_look"
+          options:
+            look: "Default"
+    feedbacks: []
+    notes: "OPEN QUESTION: PP7 Look names. Requires PP7+."
+
+  - position: [1, 6]
+    style:
+      text_top: "Look 2"
+      text_bottom: "ルック2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "pro7_set_look"
+          options:
+            look: "Worship"
+    feedbacks: []
+    notes: "OPEN QUESTION: PP7 Look name for worship. Requires PP7+."
+
+  # === ROW 2: Stage Display + Macro Controls ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Stage 1"
+      text_bottom: "ステージ1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "stage_display_layout"
+          options:
+            layout: 0
+    feedbacks: []
+    notes: "OPEN QUESTION: Stage display layout index. Shows current/next slides for stage monitors."
+
+  - position: [2, 1]
+    style:
+      text_top: "Stage 2"
+      text_bottom: "ステージ2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "stage_display_layout"
+          options:
+            layout: 1
+    feedbacks: []
+    notes: "OPEN QUESTION: Second stage display layout"
+
+  - position: [2, 4]
+    style:
+      text_top: "Macro 1"
+      text_bottom: "マクロ1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "pro7_trigger_macro"
+          options:
+            macro: "Macro 1"
+    feedbacks: []
+    notes: "OPEN QUESTION: PP7 macro names. Macros automate common PP tasks."
+
+  - position: [2, 5]
+    style:
+      text_top: "Macro 2"
+      text_bottom: "マクロ2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "pro7_trigger_macro"
+          options:
+            macro: "Macro 2"
+    feedbacks: []
+    notes: "OPEN QUESTION: PP7 macro name"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Core"
+      text_bottom: "◀ 基本"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 2
+    notes: "Back to Slides core page"
+
+  - position: [3, 2]
+    style:
+      text_top: "End ▶"
+      text_bottom: "最後 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No next page in role (page 3 is last slides page). Grayed out."
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

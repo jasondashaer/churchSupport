@@ -1,0 +1,51 @@
+# Companion Triggers
+# Automated actions that fire based on conditions or schedules.
+#
+# Companion supports triggers that can:
+#   - Fire on a schedule (time-based)
+#   - Fire on variable change
+#   - Fire on connection status change
+#
+# This file is a placeholder. Triggers will be configured after
+# the base button layout is working and tested.
+
+triggers:
+
+  # === Placeholder: Auto-reconnect on connection loss ===
+  # - name: "auto_reconnect_propresenter"
+  #   condition: "connection_lost"
+  #   connection: "propresenter"
+  #   delay_ms: 5000
+  #   actions:
+  #     - connection: "internal"
+  #       action: "connection_disable"
+  #       options:
+  #         connection_id: "propresenter"
+  #     - connection: "internal"
+  #       action: "wait"
+  #       options:
+  #         duration_ms: 2000
+  #     - connection: "internal"
+  #       action: "connection_enable"
+  #       options:
+  #         connection_id: "propresenter"
+  #   notes: "Auto-reconnect after 5 seconds of connection loss. Enable after testing."
+
+  # === Placeholder: Pre-service auto-start ===
+  # - name: "sunday_auto_start"
+  #   condition: "schedule"
+  #   schedule:
+  #     day: "sunday"
+  #     time: "09:00"
+  #   actions:
+  #     - "Execute startup sequence"
+  #   notes: "FUTURE: Auto-start systems at 9 AM on Sundays"
+
+notes: |
+  Triggers are an advanced Companion feature.
+  Start with manual button control, add triggers after the core system is stable.
+  Common trigger patterns for church use:
+  - Auto-reconnect on connection loss
+  - Scheduled startup before service
+  - Auto-record when streaming starts
+  - Warning flash when timer expires

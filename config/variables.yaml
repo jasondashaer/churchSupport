@@ -1,0 +1,47 @@
+# Companion Custom Variables
+# These variables are used across pages for dynamic button text and logic.
+#
+# Companion provides built-in variables like:
+#   $(internal:time_hms)     - Current time HH:MM:SS
+#   $(internal:time_s)       - Epoch seconds (for calculations)
+#   $(internal:date)         - Current date
+#   $(propresenter:*)        - ProPresenter state variables
+#   $(obs:*)                 - OBS state variables
+#   $(atem:*)                - ATEM state variables
+#
+# Custom variables defined here supplement the built-in ones.
+
+custom_variables:
+
+  - name: "startup_status"
+    default: "READY"
+    description: "Tracks system startup progress"
+    values:
+      - "READY"       # System ready for startup
+      - "STARTING"    # Startup sequence in progress
+      - "COMPLETE"    # All systems online
+      - "ERROR"       # One or more systems failed to connect
+
+  - name: "service_day"
+    default: "sunday"
+    description: "Current service type (affects preset selection)"
+    values:
+      - "sunday"      # Sunday service presets
+      - "midweek"     # Midweek service presets
+    notes: |
+      OPEN QUESTION: Can this be auto-detected from day of week?
+      Companion's $(internal:time_s) can be used with math to determine day.
+      Alternative: Use two separate startup buttons instead of auto-detection.
+
+  - name: "service_phase"
+    default: "pre"
+    description: "Current phase of the service (for reference display)"
+    values:
+      - "pre"           # Pre-service
+      - "announcements"
+      - "fellowship"
+      - "worship"
+      - "sermon"
+      - "prayer"
+      - "post"          # Post-service
+    notes: "Optional - used if displaying current service phase on buttons"

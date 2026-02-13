@@ -1,0 +1,390 @@
+# Page 1: Home / ホーム
+# Role selector hub with startup/shutdown controls and connection status
+#
+# This is the landing page. Volunteers select their role here.
+# Also contains system startup/shutdown and connection health indicators.
+
+page:
+  number: 1
+  name: "Home"
+  name_jp: "ホーム"
+  description: "Role selector, system startup/shutdown, connection status"
+  service_section: "navigation"
+
+buttons:
+
+  # === ROW 0: System Control + Connection Status ===
+
+  - position: [0, 0]
+    style:
+      text_top: "STARTUP"
+      text_bottom: "起動"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        # Multi-action startup sequence
+        - connection: "wol"
+          action: "wake"
+          options: {}
+          notes: "Send WOL magic packet to AV computers"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 5000
+        - connection: "internal"
+          action: "run_shell_path"
+          options:
+            path: "scripts/startup-sunday.sh"
+          notes: "Launch apps and recall presets. Script detects day-of-week."
+        - connection: "yamaha"
+          action: "scene_recall"
+          options:
+            scene: 1
+          notes: "OPEN QUESTION: Sunday scene number on TF1"
+        - connection: "atem"
+          action: "recall_macro"
+          options:
+            macro: 0
+          notes: "OPEN QUESTION: ATEM startup macro number"
+    feedbacks:
+      - connection: "internal"
+        feedback: "variable_value"
+        options:
+          variable: "startup_status"
+        notes: "Custom variable tracks startup progress"
+    step_count: 1
+    notes: |
+      Startup sequence: WOL computers > wait > launch apps > recall presets.
+      OPEN QUESTION: Exact startup sequence depends on equipment topology.
+      The shell script handles day-of-week detection for Sunday vs midweek presets.
+      Companion internal:run_shell_path has 20-second timeout - long waits handled by script backgrounding.
+
+  - position: [0, 1]
+    style:
+      text_top: "SHUTDOWN"
+      text_bottom: "終了"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        # Step 1: Show confirmation (button text changes to CONFIRM?)
+        # Step 2: Execute shutdown
+        # Using multi-step button: step 1 = arm, step 2 = fire
+        - connection: "internal"
+          action: "button_step"
+          options:
+            step: 2
+          notes: "Advances to step 2 (confirmation state)"
+    step_count: 2
+    step_2_style:
+      text_top: "CONFIRM?"
+      text_bottom: "確認?"
+      color_bg: "#CCCC00"
+      color_text: "#000000"
+    step_2_actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_store"
+          options:
+            scene: 199
+          notes: "Save current mix to 'last state' scene (scene 199). WARNING: no confirmation on TF1"
+        - connection: "obs"
+          action: "stop_record"
+          options: {}
+        - connection: "obs"
+          action: "stop_streaming"
+          options: {}
+        - connection: "propresenter"
+          action: "clear_all"
+          options: {}
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 2000
+        - connection: "internal"
+          action: "run_shell_path"
+          options:
+            path: "scripts/shutdown-graceful.sh"
+          notes: "Quit apps, power off displays, shutdown remote computers"
+    step_2_timeout_ms: 5000
+    notes: |
+      2-step confirmation: First press shows CONFIRM? (yellow).
+      Second press within 5 seconds executes shutdown.
+      If no second press, resets to normal state.
+      Sequence: Save TF1 > Stop OBS > Clear PP > Black ATEM > Quit apps > Power off.
+
+  - position: [0, 3]
+    style:
+      text_top: "PP"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "propresenter"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "ProPresenter connection status. Green = connected, Red = disconnected."
+
+  - position: [0, 4]
+    style:
+      text_top: "OBS"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "OBS connection status"
+
+  - position: [0, 5]
+    style:
+      text_top: "ATEM"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "atem"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "ATEM connection status"
+
+  - position: [0, 6]
+    style:
+      text_top: "TF1"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "Yamaha TF1 connection status"
+
+  # === ROW 1: Role Selection (large, clear buttons) ===
+
+  - position: [1, 0]
+    style:
+      text_top: "SLIDES"
+      text_bottom: "スライド"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 2
+    feedbacks: []
+    notes: "Navigate to Slides role pages (ProPresenter). Pages 2-3."
+
+  - position: [1, 2]
+    style:
+      text_top: "AUDIO"
+      text_bottom: "音響"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 4
+    feedbacks: []
+    notes: "Navigate to Audio role pages (Yamaha TF1). Pages 4-5."
+
+  - position: [1, 4]
+    style:
+      text_top: "CAMERA"
+      text_bottom: "カメラ"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 6
+    feedbacks: []
+    notes: "Navigate to Camera role pages (ATEM). Pages 6-7."
+
+  - position: [1, 6]
+    style:
+      text_top: "STREAM"
+      text_bottom: "配信"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 8
+    feedbacks: []
+    notes: "Navigate to Streaming role pages (OBS). Pages 8-9."
+
+  # === ROW 2: Status / Information ===
+
+  - position: [2, 0]
+    style:
+      text_top: "$(internal:time_hms)"
+      text_bottom: "時刻"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Current time display using Companion internal variable"
+
+  - position: [2, 2]
+    style:
+      text_top: "LIVE"
+      text_bottom: "配信中"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "streaming_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+          color_text: "#FFFFFF"
+    notes: "Shows red when OBS is streaming live"
+
+  - position: [2, 3]
+    style:
+      text_top: "REC"
+      text_bottom: "録画中"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "recording_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+          color_text: "#FFFFFF"
+    notes: "Shows red when OBS is recording"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "HOME"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Current page indicator (already on home). Grayed out."
+
+  - position: [3, 5]
+    style:
+      text_top: "EMERG."
+      text_bottom: "緊急"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 10
+    feedbacks: []
+    notes: "Navigate to Emergency page"
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+    notes: "SAFETY: Mutes TF1 master output. OPEN QUESTION: Confirm stereo out channel ID."
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"
+    notes: "SAFETY: Cuts ATEM program output to black"

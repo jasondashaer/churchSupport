@@ -1,0 +1,370 @@
+# Page 9: Streaming - Extended / 配信詳細
+# Additional OBS controls: source visibility, transitions, profiles
+
+page:
+  number: 9
+  name: "Streaming - Extended"
+  name_jp: "配信詳細"
+  description: "Extended OBS controls: source visibility, profiles, transitions"
+  role: "streaming"
+  primary_connection: "obs"
+
+buttons:
+
+  # === ROW 0: Page Header + Profile/Collection Selection ===
+
+  - position: [0, 0]
+    style:
+      text_top: "STREAM+"
+      text_bottom: "配信+"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+
+  - position: [0, 2]
+    style:
+      text_top: "Sunday"
+      text_bottom: "日曜プロフ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_profile"
+          options:
+            profile: "Sunday Service"
+    feedbacks: []
+    notes: "OPEN QUESTION: OBS profile name for Sunday. WARNING: Switching profiles can be disruptive."
+
+  - position: [0, 3]
+    style:
+      text_top: "Midweek"
+      text_bottom: "平日プロフ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_profile"
+          options:
+            profile: "Midweek"
+    feedbacks: []
+    notes: "OPEN QUESTION: OBS profile name for midweek events."
+
+  # === ROW 1: Source Visibility Toggles ===
+
+  - position: [1, 0]
+    style:
+      text_top: "Logo"
+      text_bottom: "ロゴ表示"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_source_visibility"
+          options:
+            scene: "current"
+            source: "Logo"
+            visible: "toggle"
+    feedbacks:
+      - connection: "obs"
+        feedback: "source_visible"
+        options:
+          scene: "current"
+          source: "Logo"
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Logo overlay source name in OBS."
+
+  - position: [1, 1]
+    style:
+      text_top: "Lower 3rd"
+      text_bottom: "テロップ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_source_visibility"
+          options:
+            scene: "current"
+            source: "Lower Third"
+            visible: "toggle"
+    feedbacks:
+      - connection: "obs"
+        feedback: "source_visible"
+        options:
+          scene: "current"
+          source: "Lower Third"
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Lower third source name. Used for speaker name, song title, etc."
+
+  - position: [1, 2]
+    style:
+      text_top: "Chat"
+      text_bottom: "チャット"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_source_visibility"
+          options:
+            scene: "current"
+            source: "Chat"
+            visible: "toggle"
+    feedbacks:
+      - connection: "obs"
+        feedback: "source_visible"
+        options:
+          scene: "current"
+          source: "Chat"
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Chat/comments overlay source name. May not be used."
+
+  # === ROW 1: Transition Controls ===
+
+  - position: [1, 5]
+    style:
+      text_top: "Cut"
+      text_bottom: "カット"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "transition"
+          options:
+            transition: "Cut"
+    feedbacks: []
+    notes: "OBS scene transition: instant cut"
+
+  - position: [1, 6]
+    style:
+      text_top: "Fade"
+      text_bottom: "フェード"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "transition"
+          options:
+            transition: "Fade"
+            duration: 500
+    feedbacks: []
+    notes: "OBS scene transition: 500ms fade"
+
+  - position: [1, 7]
+    style:
+      text_top: "Stinger"
+      text_bottom: "スティンガー"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "transition"
+          options:
+            transition: "Stinger"
+    feedbacks: []
+    notes: "OPEN QUESTION: Stinger transition configured in OBS?"
+
+  # === ROW 2: Quick Scene Presets for Service Sections ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Pre-Svc"
+      text_bottom: "礼拝前"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Starting Soon"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Starting Soon"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Pre-service scene name"
+
+  - position: [2, 1]
+    style:
+      text_top: "Worship"
+      text_bottom: "賛美"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Worship"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Worship"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Worship-specific OBS scene (may be same as Wide Shot)"
+
+  - position: [2, 2]
+    style:
+      text_top: "Sermon"
+      text_bottom: "メッセージ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Sermon"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Sermon"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Sermon-specific OBS scene (speaker + slides PiP)"
+
+  - position: [2, 5]
+    style:
+      text_top: "Audio"
+      text_bottom: "音声のみ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "source_mute_toggle"
+          options:
+            source: "Desktop Audio"
+    feedbacks: []
+    notes: "OPEN QUESTION: OBS audio source name for desktop/system audio"
+
+  - position: [2, 6]
+    style:
+      text_top: "Mic"
+      text_bottom: "マイク"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "source_mute_toggle"
+          options:
+            source: "Mic/Aux"
+    feedbacks: []
+    notes: "OPEN QUESTION: OBS microphone source name"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Core"
+      text_bottom: "◀ 基本"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 8
+    notes: "Back to Streaming core page"
+
+  - position: [3, 2]
+    style:
+      text_top: "End ▶"
+      text_bottom: "最後 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No next page in role. Grayed out."
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

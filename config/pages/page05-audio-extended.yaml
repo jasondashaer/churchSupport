@@ -1,0 +1,429 @@
+# Page 5: Audio - Extended / 音響詳細
+# Additional Yamaha TF1 controls: individual channels, monitors, effects
+
+page:
+  number: 5
+  name: "Audio - Extended"
+  name_jp: "音響詳細"
+  description: "Extended TF1 controls: individual instruments, monitors, effects"
+  role: "audio"
+  primary_connection: "yamaha"
+
+buttons:
+
+  # === ROW 0: Page Header ===
+
+  - position: [0, 0]
+    style:
+      text_top: "AUDIO+"
+      text_bottom: "音響+"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+
+  # === ROW 0: DCA Group Mutes ===
+
+  - position: [0, 2]
+    style:
+      text_top: "Vocals"
+      text_bottom: "ボーカルDCA"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "DCA/001"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "DCA/001"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: DCA 1 assignment (assumed all vocals)"
+
+  - position: [0, 3]
+    style:
+      text_top: "Band"
+      text_bottom: "バンドDCA"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "DCA/002"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "DCA/002"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: DCA 2 assignment (assumed all instruments)"
+
+  - position: [0, 4]
+    style:
+      text_top: "FX"
+      text_bottom: "エフェクトDCA"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "DCA/003"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "DCA/003"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: DCA 3 assignment (assumed effects/reverb)"
+
+  # === ROW 1: Individual Instrument Channels ===
+
+  - position: [1, 0]
+    style:
+      text_top: "Keys"
+      text_bottom: "キーボード"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/005"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/005"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Keyboard channel (assumed Ch 5)"
+
+  - position: [1, 1]
+    style:
+      text_top: "Guitar"
+      text_bottom: "ギター"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/006"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/006"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Guitar channel (assumed Ch 6)"
+
+  - position: [1, 2]
+    style:
+      text_top: "Bass"
+      text_bottom: "ベース"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/007"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/007"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Bass channel (assumed Ch 7)"
+
+  - position: [1, 3]
+    style:
+      text_top: "Drums"
+      text_bottom: "ドラム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/008"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/008"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Drums channel (assumed Ch 8). May be multiple channels for drums."
+
+  - position: [1, 5]
+    style:
+      text_top: "Aux 1"
+      text_bottom: "AUX 1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/013"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/013"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Auxiliary input channel"
+
+  - position: [1, 6]
+    style:
+      text_top: "Aux 2"
+      text_bottom: "AUX 2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "InCh/014"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "InCh/014"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Auxiliary input 2"
+
+  # === ROW 2: Monitor/Bus Controls + Scene Store ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Mon 1"
+      text_bottom: "モニター1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "AuxCh/001"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "AuxCh/001"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Monitor bus 1 assignment (stage monitor)"
+
+  - position: [2, 1]
+    style:
+      text_top: "Mon 2"
+      text_bottom: "モニター2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_toggle"
+          options:
+            channel: "AuxCh/002"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "AuxCh/002"
+        style_when_true:
+          color_bg: "#CC0000"
+        style_when_false:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Monitor bus 2 assignment"
+
+  - position: [2, 5]
+    style:
+      text_top: "Save"
+      text_bottom: "シーン保存"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "scene_store"
+          options:
+            scene: 199
+    feedbacks: []
+    notes: |
+      Save current mix to scene 199 (quick-save slot).
+      WARNING: TF1 scene store has NO confirmation dialog - overwrites immediately.
+      OPEN QUESTION: Designated quick-save scene number.
+
+  - position: [2, 6]
+    style:
+      text_top: "Prev Scn"
+      text_bottom: "前シーン"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "recall_dec"
+          options: {}
+    feedbacks: []
+    notes: "Recall previous scene (decrement)"
+
+  - position: [2, 7]
+    style:
+      text_top: "Next Scn"
+      text_bottom: "次シーン"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "recall_inc"
+          options: {}
+    feedbacks: []
+    notes: "Recall next scene (increment)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Core"
+      text_bottom: "◀ 基本"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 4
+    notes: "Back to Audio core page"
+
+  - position: [3, 2]
+    style:
+      text_top: "End ▶"
+      text_bottom: "最後 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No next page in role. Grayed out."
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

@@ -1,0 +1,388 @@
+# Page 7: Camera - Extended / カメラ詳細
+# Additional ATEM controls: keyers, PiP, macros, transition settings
+
+page:
+  number: 7
+  name: "Camera - Extended"
+  name_jp: "カメラ詳細"
+  description: "Extended ATEM controls: keyers, macros, transition settings"
+  role: "camera"
+  primary_connection: "atem"
+
+buttons:
+
+  # === ROW 0: Page Header + Transition Type Selection ===
+
+  - position: [0, 0]
+    style:
+      text_top: "CAMERA+"
+      text_bottom: "カメラ+"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+
+  - position: [0, 2]
+    style:
+      text_top: "Mix"
+      text_bottom: "ミックス"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_style"
+          options:
+            style: "mix"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "transition_style"
+        options:
+          style: "mix"
+          me: 0
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set transition type to Mix (dissolve)"
+
+  - position: [0, 3]
+    style:
+      text_top: "Dip"
+      text_bottom: "ディップ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_style"
+          options:
+            style: "dip"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "transition_style"
+        options:
+          style: "dip"
+          me: 0
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set transition type to Dip (through color)"
+
+  - position: [0, 4]
+    style:
+      text_top: "Wipe"
+      text_bottom: "ワイプ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_style"
+          options:
+            style: "wipe"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "transition_style"
+        options:
+          style: "wipe"
+          me: 0
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set transition type to Wipe"
+
+  # === ROW 1: Upstream/Downstream Keyers ===
+
+  - position: [1, 0]
+    style:
+      text_top: "USK 1"
+      text_bottom: "USK 1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "usk_on_air"
+          options:
+            keyer: 0
+            me: 0
+            state: "toggle"
+    feedbacks:
+      - connection: "atem"
+        feedback: "usk_on_air"
+        options:
+          keyer: 0
+          me: 0
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Toggle Upstream Keyer 1 on/off. Red when on air. OPEN QUESTION: Is USK configured?"
+
+  - position: [1, 1]
+    style:
+      text_top: "DSK 1"
+      text_bottom: "DSK 1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "dsk_on_air"
+          options:
+            keyer: 0
+            state: "toggle"
+    feedbacks:
+      - connection: "atem"
+        feedback: "dsk_on_air"
+        options:
+          keyer: 0
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Toggle Downstream Keyer 1 on/off. Useful for logo/watermark overlay."
+
+  - position: [1, 2]
+    style:
+      text_top: "DSK 2"
+      text_bottom: "DSK 2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "dsk_on_air"
+          options:
+            keyer: 1
+            state: "toggle"
+    feedbacks:
+      - connection: "atem"
+        feedback: "dsk_on_air"
+        options:
+          keyer: 1
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Toggle Downstream Keyer 2. OPEN QUESTION: DSK 2 usage."
+
+  # === ROW 1: ATEM Macros ===
+
+  - position: [1, 5]
+    style:
+      text_top: "Macro 1"
+      text_bottom: "マクロ1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "run_macro"
+          options:
+            macro: 0
+    feedbacks: []
+    notes: "OPEN QUESTION: ATEM macro 1 function"
+
+  - position: [1, 6]
+    style:
+      text_top: "Macro 2"
+      text_bottom: "マクロ2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "run_macro"
+          options:
+            macro: 1
+    feedbacks: []
+    notes: "OPEN QUESTION: ATEM macro 2 function"
+
+  - position: [1, 7]
+    style:
+      text_top: "Macro 3"
+      text_bottom: "マクロ3"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "run_macro"
+          options:
+            macro: 2
+    feedbacks: []
+    notes: "OPEN QUESTION: ATEM macro 3 function"
+
+  # === ROW 2: Transition Rate + ATEM State ===
+
+  - position: [2, 0]
+    style:
+      text_top: "0.5s"
+      text_bottom: "速い"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_rate"
+          options:
+            rate: 15
+            me: 0
+    feedbacks: []
+    notes: "Set transition duration to 0.5s (15 frames at 30fps)"
+
+  - position: [2, 1]
+    style:
+      text_top: "1.0s"
+      text_bottom: "標準"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_rate"
+          options:
+            rate: 30
+            me: 0
+    feedbacks: []
+    notes: "Set transition duration to 1.0s (30 frames)"
+
+  - position: [2, 2]
+    style:
+      text_top: "2.0s"
+      text_bottom: "ゆっくり"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "transition_rate"
+          options:
+            rate: 60
+            me: 0
+    feedbacks: []
+    notes: "Set transition duration to 2.0s (60 frames)"
+
+  - position: [2, 5]
+    style:
+      text_top: "Save"
+      text_bottom: "ATEM保存"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "atem"
+          action: "save_startup_state"
+          options: {}
+    feedbacks: []
+    notes: "Save current ATEM state as startup state"
+
+  - position: [2, 6]
+    style:
+      text_top: "Clear"
+      text_bottom: "ATEM初期化"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "clear_startup_state"
+          options: {}
+    feedbacks: []
+    notes: "Clear ATEM startup state (revert to factory defaults on next power cycle)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Core"
+      text_bottom: "◀ 基本"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 6
+    notes: "Back to Camera core page"
+
+  - position: [3, 2]
+    style:
+      text_top: "End ▶"
+      text_bottom: "最後 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No next page in role. Grayed out."
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

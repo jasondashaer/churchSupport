@@ -1,0 +1,443 @@
+# Page 10: Emergency / 緊急
+# Panic controls for all systems - available from every page via bottom row
+#
+# Every button on this page is a safety action. No navigation clutter.
+# Large buttons, clear labels, unmistakable colors.
+
+page:
+  number: 10
+  name: "Emergency"
+  name_jp: "緊急"
+  description: "All-stop and emergency controls across all systems"
+  service_section: "emergency"
+
+buttons:
+
+  # === ROW 0: Page Header + System Kill Switches ===
+
+  - position: [0, 0]
+    style:
+      text_top: "EMERGENCY"
+      text_bottom: "緊急ページ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Page title indicator"
+
+  - position: [0, 2]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+    notes: "Mutes TF1 master stereo output. OPEN QUESTION: Confirm channel ID."
+
+  - position: [0, 3]
+    style:
+      text_top: "UNMUTE"
+      text_bottom: "ミュート解除"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: false
+    feedbacks: []
+    notes: "Unmutes TF1 master. Recovery action."
+
+  - position: [0, 5]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"
+    notes: "Cuts ATEM program output to black"
+
+  - position: [0, 6]
+    style:
+      text_top: "CAM 1"
+      text_bottom: "カメラ1復帰"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 1
+            me: 0
+    feedbacks: []
+    notes: "Recovery: Cut back to Camera 1 (safe default). OPEN QUESTION: Confirm safe camera input."
+
+  # === ROW 1: Per-System Emergency Controls ===
+
+  - position: [1, 0]
+    style:
+      text_top: "PP Clear"
+      text_bottom: "PP全消去"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_all"
+          options: {}
+    feedbacks: []
+    notes: "Clear all ProPresenter outputs (slides, backgrounds, messages)"
+
+  - position: [1, 1]
+    style:
+      text_top: "PP Logo"
+      text_bottom: "PPロゴ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_to_logo"
+          options: {}
+    feedbacks: []
+    notes: "Recovery: Clear PP to logo (safe fallback image)"
+
+  - position: [1, 3]
+    style:
+      text_top: "OBS Stop"
+      text_bottom: "OBS停止"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "obs"
+          action: "stop_streaming"
+          options: {}
+        - connection: "obs"
+          action: "stop_record"
+          options: {}
+    feedbacks: []
+    notes: "Emergency stop streaming AND recording"
+
+  - position: [1, 4]
+    style:
+      text_top: "OBS Start"
+      text_bottom: "OBS開始"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "obs"
+          action: "start_streaming"
+          options: {}
+        - connection: "obs"
+          action: "start_record"
+          options: {}
+    feedbacks: []
+    notes: "Recovery: Restart streaming and recording"
+
+  - position: [1, 6]
+    style:
+      text_top: "ALL STOP"
+      text_bottom: "全停止"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        # Nuclear option: mute audio + black video + clear slides + stop stream
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+        - connection: "propresenter"
+          action: "clear_all"
+          options: {}
+        - connection: "obs"
+          action: "stop_streaming"
+          options: {}
+        - connection: "obs"
+          action: "stop_record"
+          options: {}
+    feedbacks: []
+    notes: "NUCLEAR: Mutes audio, blacks video, clears slides, stops stream. Use only in real emergencies."
+
+  # === ROW 2: Connection Recovery ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Reconnect"
+      text_bottom: "PP再接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "propresenter"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 1000
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "propresenter"
+    feedbacks:
+      - connection: "propresenter"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "Toggle ProPresenter connection off/on to force reconnect"
+
+  - position: [2, 1]
+    style:
+      text_top: "Reconnect"
+      text_bottom: "OBS再接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "obs"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 1000
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "obs"
+    feedbacks:
+      - connection: "obs"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "Toggle OBS connection off/on to force reconnect"
+
+  - position: [2, 2]
+    style:
+      text_top: "Reconnect"
+      text_bottom: "ATEM再接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "atem"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 1000
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "atem"
+    feedbacks:
+      - connection: "atem"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "Toggle ATEM connection off/on to force reconnect"
+
+  - position: [2, 3]
+    style:
+      text_top: "Reconnect"
+      text_bottom: "TF1再接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "yamaha"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 1000
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "yamaha"
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "Toggle TF1 connection off/on to force reconnect"
+
+  - position: [2, 6]
+    style:
+      text_top: "Reconnect"
+      text_bottom: "全再接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "propresenter"
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "obs"
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "atem"
+        - connection: "internal"
+          action: "connection_disable"
+          options:
+            connection_id: "yamaha"
+        - connection: "internal"
+          action: "wait"
+          options:
+            duration_ms: 2000
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "propresenter"
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "obs"
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "atem"
+        - connection: "internal"
+          action: "connection_enable"
+          options:
+            connection_id: "yamaha"
+    feedbacks: []
+    notes: "Nuclear reconnect: Disable all connections, wait 2s, re-enable all"
+
+  # === ROW 3: Navigation ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+    feedbacks: []
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

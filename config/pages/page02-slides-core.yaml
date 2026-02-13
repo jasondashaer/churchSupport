@@ -1,0 +1,335 @@
+# Page 2: Slides - Core Controls / スライド基本操作
+# ProPresenter control for the Slides/Lyrics volunteer
+#
+# This page has everything a slides volunteer needs for normal operation:
+# slide navigation, clear, playlist selection, and slide count display.
+
+page:
+  number: 2
+  name: "Slides - Core"
+  name_jp: "スライド基本"
+  description: "Core ProPresenter controls for the slides volunteer"
+  role: "slides"
+  primary_connection: "propresenter"
+
+buttons:
+
+  # === ROW 0: Page Header + Slide Status ===
+
+  - position: [0, 0]
+    style:
+      text_top: "SLIDES"
+      text_bottom: "スライド"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Page title indicator"
+
+  - position: [0, 2]
+    style:
+      text_top: "Slide"
+      text_bottom: "$(propresenter:current_slide)"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Current slide number display via Companion variable. OPEN QUESTION: Variable name may differ by module version."
+
+  - position: [0, 3]
+    style:
+      text_top: "Total"
+      text_bottom: "$(propresenter:total_slides)"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Total slides in current presentation"
+
+  - position: [0, 6]
+    style:
+      text_top: "PP"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "propresenter"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "ProPresenter connection status indicator"
+
+  # === ROW 1: Primary Slide Navigation ===
+
+  - position: [1, 0]
+    style:
+      text_top: "◀ PREV"
+      text_bottom: "前スライド"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "previous_slide"
+          options: {}
+    feedbacks: []
+    notes: "Previous slide. Yellow = caution (going backwards)."
+
+  - position: [1, 1]
+    style:
+      text_top: "NEXT ▶"
+      text_bottom: "次スライド"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "next_slide"
+          options: {}
+    feedbacks: []
+    notes: "Next slide. Green = primary action (most-used button on this page)."
+
+  - position: [1, 3]
+    style:
+      text_top: "Clear"
+      text_bottom: "クリア"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_slide"
+          options: {}
+    feedbacks: []
+    notes: "Clear current slide from output (keeps background)"
+
+  - position: [1, 4]
+    style:
+      text_top: "Clear All"
+      text_bottom: "全消去"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_all"
+          options: {}
+    feedbacks: []
+    notes: "Clear ALL outputs (slides, backgrounds, messages, audio)"
+
+  - position: [1, 6]
+    style:
+      text_top: "Logo"
+      text_bottom: "ロゴ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_to_logo"
+          options: {}
+    feedbacks: []
+    notes: "Clear to logo/default background image"
+
+  # === ROW 2: Presentation/Playlist Quick Access ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Worship"
+      text_bottom: "賛美"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "trigger_playlist"
+          options:
+            playlist: "Worship"
+    feedbacks: []
+    notes: "OPEN QUESTION: Exact playlist name for worship lyrics. May need specific_slide action instead."
+
+  - position: [2, 1]
+    style:
+      text_top: "Sermon"
+      text_bottom: "メッセージ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "trigger_playlist"
+          options:
+            playlist: "Sermon"
+    feedbacks: []
+    notes: "OPEN QUESTION: Exact playlist name for sermon slides."
+
+  - position: [2, 2]
+    style:
+      text_top: "Announce"
+      text_bottom: "お知らせ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "trigger_playlist"
+          options:
+            playlist: "Announcements"
+    feedbacks: []
+    notes: "OPEN QUESTION: Exact playlist name for announcements."
+
+  - position: [2, 3]
+    style:
+      text_top: "Scripture"
+      text_bottom: "聖書"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "trigger_playlist"
+          options:
+            playlist: "Scripture"
+    feedbacks: []
+    notes: "OPEN QUESTION: Do they use a Scripture playlist/presentation?"
+
+  - position: [2, 5]
+    style:
+      text_top: "Blank"
+      text_bottom: "黒画面"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "propresenter"
+          action: "clear_background"
+          options: {}
+    feedbacks: []
+    notes: "Clear background layer (shows black behind slides)"
+
+  - position: [2, 7]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 3
+    feedbacks: []
+    notes: "Navigate to extended slides page (timers, messages, stage display)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+    feedbacks: []
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Home"
+      text_bottom: "◀ ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "No previous page in role (page 2 is first slides page). Grayed out."
+
+  - position: [3, 2]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 3
+    feedbacks: []
+    notes: "Next page in Slides role (extended controls)"
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

@@ -1,0 +1,412 @@
+# Page 8: Streaming - Core Controls / 配信基本操作
+# OBS Studio control for the Streaming/Recording volunteer
+#
+# Core controls: start/stop stream & recording, scene selection, status.
+
+page:
+  number: 8
+  name: "Streaming - Core"
+  name_jp: "配信基本"
+  description: "Core OBS Studio controls for the streaming volunteer"
+  role: "streaming"
+  primary_connection: "obs"
+
+buttons:
+
+  # === ROW 0: Page Header + Stream/Record Status ===
+
+  - position: [0, 0]
+    style:
+      text_top: "STREAM"
+      text_bottom: "配信"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Page title indicator"
+
+  - position: [0, 3]
+    style:
+      text_top: "LIVE"
+      text_bottom: "配信中"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "streaming_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Streaming status indicator. Red when live."
+
+  - position: [0, 4]
+    style:
+      text_top: "REC"
+      text_bottom: "録画中"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "recording_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Recording status indicator. Red when recording."
+
+  - position: [0, 6]
+    style:
+      text_top: "OBS"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "obs"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "OBS connection status indicator"
+
+  # === ROW 1: Stream & Recording Controls ===
+
+  - position: [1, 0]
+    style:
+      text_top: "GO LIVE"
+      text_bottom: "配信開始"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "obs"
+          action: "start_streaming"
+          options: {}
+    feedbacks:
+      - connection: "obs"
+        feedback: "streaming_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+          text_top: "LIVE"
+          text_bottom: "配信中"
+    notes: "Start streaming. Button turns red when live."
+
+  - position: [1, 1]
+    style:
+      text_top: "END"
+      text_bottom: "配信停止"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "obs"
+          action: "stop_streaming"
+          options: {}
+    feedbacks: []
+    notes: "Stop streaming"
+
+  - position: [1, 3]
+    style:
+      text_top: "REC"
+      text_bottom: "録画開始"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#00CC00"
+    actions:
+      press:
+        - connection: "obs"
+          action: "start_record"
+          options: {}
+    feedbacks:
+      - connection: "obs"
+        feedback: "recording_active"
+        options: {}
+        style_when_true:
+          color_bg: "#CC0000"
+          text_top: "REC"
+          text_bottom: "録画中"
+    notes: "Start recording. Button turns red when recording."
+
+  - position: [1, 4]
+    style:
+      text_top: "STOP"
+      text_bottom: "録画停止"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "obs"
+          action: "stop_record"
+          options: {}
+    feedbacks: []
+    notes: "Stop recording"
+
+  - position: [1, 6]
+    style:
+      text_top: "PAUSE"
+      text_bottom: "一時停止"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CCCC00"
+    actions:
+      press:
+        - connection: "obs"
+          action: "pause_record"
+          options: {}
+    feedbacks:
+      - connection: "obs"
+        feedback: "recording_paused"
+        options: {}
+        style_when_true:
+          color_bg: "#CCCC00"
+    notes: "Pause/resume recording"
+
+  # === ROW 2: OBS Scene Selection ===
+
+  - position: [2, 0]
+    style:
+      text_top: "Wide"
+      text_bottom: "ワイド"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Wide Shot"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Wide Shot"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Exact OBS scene name for wide/congregation shot"
+
+  - position: [2, 1]
+    style:
+      text_top: "Speaker"
+      text_bottom: "スピーカー"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Speaker"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Speaker"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Exact OBS scene name for speaker/pastor camera"
+
+  - position: [2, 2]
+    style:
+      text_top: "Slides"
+      text_bottom: "スライド"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Slides"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Slides"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Exact OBS scene name for slides/lyrics display"
+
+  - position: [2, 3]
+    style:
+      text_top: "PiP"
+      text_bottom: "ピクチャ"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Picture in Picture"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Picture in Picture"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: PiP scene (speaker + slides overlay)"
+
+  - position: [2, 5]
+    style:
+      text_top: "Starting"
+      text_bottom: "開始前"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "Starting Soon"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "Starting Soon"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Pre-service holding scene name"
+
+  - position: [2, 6]
+    style:
+      text_top: "BRB"
+      text_bottom: "休憩"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "obs"
+          action: "set_program_scene"
+          options:
+            scene: "BRB"
+    feedbacks:
+      - connection: "obs"
+        feedback: "scene_active"
+        options:
+          scene: "BRB"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "OPEN QUESTION: Break/intermission scene name"
+
+  - position: [2, 7]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 9
+    feedbacks: []
+    notes: "Navigate to extended streaming page (sources, transitions)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Home"
+      text_bottom: "◀ ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No previous page in role. Grayed out."
+
+  - position: [3, 2]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 9
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

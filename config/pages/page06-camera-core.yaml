@@ -1,0 +1,446 @@
+# Page 6: Camera - Core Controls / カメラ基本操作
+# ATEM switcher control for the Camera/Video volunteer
+#
+# Core controls: camera input selection, transitions, tally feedback.
+# Input assignments are OPEN QUESTIONS until ATEM setup is confirmed.
+
+page:
+  number: 6
+  name: "Camera - Core"
+  name_jp: "カメラ基本"
+  description: "Core ATEM switcher controls for the camera volunteer"
+  role: "camera"
+  primary_connection: "atem"
+
+buttons:
+
+  # === ROW 0: Page Header + Transition Controls ===
+
+  - position: [0, 0]
+    style:
+      text_top: "CAMERA"
+      text_bottom: "カメラ"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    feedbacks: []
+    notes: "Page title indicator"
+
+  - position: [0, 3]
+    style:
+      text_top: "CUT"
+      text_bottom: "カット"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "cut"
+          options:
+            me: 0
+    feedbacks: []
+    notes: "Execute a hard cut transition on ME 0"
+
+  - position: [0, 4]
+    style:
+      text_top: "AUTO"
+      text_bottom: "オート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "auto_transition"
+          options:
+            me: 0
+    feedbacks: []
+    notes: "Execute auto transition (mix/dip/wipe per ATEM settings)"
+
+  - position: [0, 6]
+    style:
+      text_top: "ATEM"
+      text_bottom: "接続"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#666666"
+    actions:
+      press: []
+    feedbacks:
+      - connection: "atem"
+        feedback: "connection_status"
+        options: {}
+        style_when_true:
+          color_bg: "#00CC00"
+        style_when_false:
+          color_bg: "#CC0000"
+    notes: "ATEM connection status indicator"
+
+  # === ROW 1: Program Input Selection (with tally feedback) ===
+  # Red = currently on program (LIVE), Green = on preview
+
+  - position: [1, 0]
+    style:
+      text_top: "CAM 1"
+      text_bottom: "カメラ1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 1
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: 1
+        style_when_true:
+          color_bg: "#CC0000"
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 1
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Input 1 assignment (assumed wide/congregation camera)"
+
+  - position: [1, 1]
+    style:
+      text_top: "CAM 2"
+      text_bottom: "カメラ2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 2
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: 2
+        style_when_true:
+          color_bg: "#CC0000"
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 2
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Input 2 assignment (assumed pulpit/speaker camera)"
+
+  - position: [1, 2]
+    style:
+      text_top: "CAM 3"
+      text_bottom: "カメラ3"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 3
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: 3
+        style_when_true:
+          color_bg: "#CC0000"
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 3
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Input 3 assignment. May not be used if only 1-2 cameras."
+
+  - position: [1, 3]
+    style:
+      text_top: "CAM 4"
+      text_bottom: "カメラ4"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 4
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: 4
+        style_when_true:
+          color_bg: "#CC0000"
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 4
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Input 4 assignment. May not be used."
+
+  - position: [1, 5]
+    style:
+      text_top: "PP Out"
+      text_bottom: "PP映像"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: 5
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: 5
+        style_when_true:
+          color_bg: "#CC0000"
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 5
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "OPEN QUESTION: Which ATEM input has ProPresenter graphics output? Assumed input 5."
+
+  - position: [1, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#444444"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#CC0000"
+    notes: "Switch to ATEM black (no input)"
+
+  # === ROW 2: Preview Input Selection ===
+
+  - position: [2, 0]
+    style:
+      text_top: "PVW 1"
+      text_bottom: "PVW カメラ1"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press:
+        - connection: "atem"
+          action: "preview_input"
+          options:
+            input: 1
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 1
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set Camera 1 to preview"
+
+  - position: [2, 1]
+    style:
+      text_top: "PVW 2"
+      text_bottom: "PVW カメラ2"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press:
+        - connection: "atem"
+          action: "preview_input"
+          options:
+            input: 2
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 2
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set Camera 2 to preview"
+
+  - position: [2, 2]
+    style:
+      text_top: "PVW 3"
+      text_bottom: "PVW カメラ3"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press:
+        - connection: "atem"
+          action: "preview_input"
+          options:
+            input: 3
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 3
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set Camera 3 to preview. OPEN QUESTION: May not be used."
+
+  - position: [2, 5]
+    style:
+      text_top: "PVW PP"
+      text_bottom: "PVW PP映像"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press:
+        - connection: "atem"
+          action: "preview_input"
+          options:
+            input: 5
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "preview_input"
+        options:
+          input: 5
+        style_when_true:
+          color_bg: "#00CC00"
+    notes: "Set ProPresenter output to preview"
+
+  - position: [2, 7]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 7
+    feedbacks: []
+    notes: "Navigate to extended camera page (keyers, PiP, macros)"
+
+  # === ROW 3: Navigation + Emergency ===
+
+  - position: [3, 0]
+    style:
+      text_top: "Home"
+      text_bottom: "ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 1
+
+  - position: [3, 1]
+    style:
+      text_top: "◀ Home"
+      text_bottom: "◀ ホーム"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#333333"
+    actions:
+      press: []
+    notes: "No previous page in role. Grayed out."
+
+  - position: [3, 2]
+    style:
+      text_top: "More ▶"
+      text_bottom: "詳細 ▶"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#0066CC"
+    actions:
+      press:
+        - connection: "internal"
+          action: "set_page"
+          options:
+            page: 7
+
+  - position: [3, 6]
+    style:
+      text_top: "MUTE ALL"
+      text_bottom: "全ミュート"
+      font_size: "14pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "yamaha"
+          action: "mute_channel"
+          options:
+            channel: "stereo_out"
+            mute: true
+    feedbacks:
+      - connection: "yamaha"
+        feedback: "channel_muted"
+        options:
+          channel: "stereo_out"
+        style_when_true:
+          color_bg: "#FF0000"
+
+  - position: [3, 7]
+    style:
+      text_top: "BLACK"
+      text_bottom: "ブラック"
+      font_size: "18pt"
+      color_text: "#FFFFFF"
+      color_bg: "#CC0000"
+    actions:
+      press:
+        - connection: "atem"
+          action: "program_input"
+          options:
+            input: "black"
+            me: 0
+    feedbacks:
+      - connection: "atem"
+        feedback: "program_input"
+        options:
+          input: "black"
+        style_when_true:
+          color_bg: "#FF0000"

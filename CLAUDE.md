@@ -6,7 +6,9 @@ A Bitfocus Companion + Stream Deck XL configuration for a bilingual (English/Jap
 This is NOT a single-operator system. Each role gets focused, uncluttered pages showing only what that volunteer needs.
 
 ## Critical Technical Decision
-`.companionconfig` files are SQLite-backed compressed exports and cannot be hand-crafted. This project provides **YAML specification files** that document every connection, page, and button so someone can recreate the configuration in Companion's web UI button-by-button. The YAML specs are the source of truth.
+Companion v4.2+ supports importing **JSON-formatted** configuration files via its Import/Export UI. This project provides **YAML specification files** as the source of truth, plus a **converter script** (`scripts/yaml-to-companion.py`) that generates an importable `.companionconfig` JSON file from those YAML specs. This eliminates the need to manually recreate every button through the web UI.
+
+The YAML specs remain the canonical source. Edit the YAML, run the converter, import the result.
 
 ## Equipment & Companion Modules
 
@@ -73,7 +75,8 @@ Row 3: [3,0] [3,1] [3,2] [3,3] [3,4] [3,5] [3,6] [3,7]
 ## File Conventions
 - Config specs: `config/connections.yaml`, `config/pages/pageNN-name.yaml`
 - Documentation: `docs/*.md` (English primary)
-- Scripts: `scripts/*.sh` (bilingual output)
+- Scripts: `scripts/*.sh` (bilingual output), `scripts/yaml-to-companion.py` (YAML→Companion converter)
+- Generated output: `output/` (gitignored, created by converter)
 - Open questions: `open-questions.md` (checkbox tracker)
 - Placeholder IPs: `192.168.1.XXX` pattern (detected and skipped by scripts)
 - OPEN QUESTION markers in YAML `notes` fields for unresolved items

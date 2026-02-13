@@ -13,6 +13,9 @@ Thumbs.db
 companion/
 *.companionconfig
 
+# Generated Companion config output
+output/
+
 # Environment/secrets
 .env
 .env.local

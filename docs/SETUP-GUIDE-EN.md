@@ -46,6 +46,24 @@ Connections 7-8 (Display, Smart Outlet) are TBD pending equipment confirmation.
 
 ## Phase 4: Build Pages
 
+### Option A: Automated Import (Recommended)
+
+Generate and import a complete config in one step:
+
+```bash
+python3 scripts/yaml-to-companion.py --verbose
+```
+
+Then in Companion:
+1. Go to **Import/Export** tab
+2. Click **Import** → select `output/church-config.companionconfig`
+3. Choose **Full Import**
+4. Go to **Connections** tab and update IP addresses for actual equipment
+
+Skip to Phase 5 after importing.
+
+### Option B: Manual Build
+
 For each of the 10 pages, open the corresponding YAML file and create every button as specified.
 
 **Recommended build order:**

@@ -1,6 +1,47 @@
 # Companion UI Walkthrough
 
-Step-by-step guide for translating the YAML specification files into a working Companion configuration. Open the relevant YAML file alongside this guide as you work.
+Step-by-step guide for building a Companion configuration from the YAML specification files.
+
+## Importing a Generated Config (Recommended)
+
+Instead of manually creating every button, you can generate and import a complete config:
+
+1. **Generate the config file:**
+   ```bash
+   python3 scripts/yaml-to-companion.py --verbose
+   ```
+   This reads all YAML specs and outputs `output/church-config.companionconfig`.
+
+2. **Validate first (optional):**
+   ```bash
+   python3 scripts/yaml-to-companion.py --validate-only --verbose
+   ```
+   Shows errors, warnings (placeholder IPs, OPEN QUESTIONs), and info messages without generating output.
+
+3. **Import into Companion:**
+   - Open Companion's web UI (`http://localhost:8000`)
+   - Go to the **Import/Export** tab
+   - Click **Import**
+   - Select `output/church-config.companionconfig`
+   - Choose **Full Import** to replace all existing config
+
+4. **Remap connections:**
+   - After import, go to the **Connections** tab
+   - Update IP addresses for each connection to match actual equipment
+   - Verify connection status indicators turn green
+
+5. **Verify the result:**
+   - Check each page on the Stream Deck XL
+   - Confirm button labels, colors, and positions match the YAML specs
+   - Test navigation buttons across all pages
+
+After importing, you can fine-tune individual buttons through the manual process described below.
+
+---
+
+## Manual Build Process
+
+If you prefer to build the config button-by-button (or need to adjust individual buttons after import), follow the steps below. Open the relevant YAML file alongside this guide as you work.
 
 ## Prerequisites
 

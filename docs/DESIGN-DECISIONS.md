@@ -109,6 +109,20 @@ The Home page (Page 1, Row 2) displays three custom Companion variables alongsid
 
 **Rationale**: At-a-glance status is critical on the Home page since all volunteers pass through it. The `startup_status` variable turns green when all systems are online and red on error, providing immediate visual confirmation. The `service_day` and `service_phase` variables help volunteers confirm they have the right presets loaded.
 
+## Why a YAML-to-JSON Converter
+
+**Original assumption**: `.companionconfig` files are SQLite-backed compressed exports that cannot be programmatically generated.
+
+**Discovery**: Companion v4.2+ actually supports importing **pretty-formatted JSON** configs via its Import/Export UI. The internal format is a structured JSON object with `pages`, `instances`, and `custom_variables` sections.
+
+**Solution**: `scripts/yaml-to-companion.py` reads all YAML spec files and generates a Companion-importable `.companionconfig` JSON file. This eliminates the tedious manual process of recreating every button through the web UI.
+
+**Design for iterative refinement**: Companion's internal JSON schema is not formally documented. The converter isolates all field name assumptions into a `FIELD_MAP` dictionary at the top of the script. When testing against a real Companion instance reveals mismatches, you change one line — not the entire script.
+
+**YAML specs remain the source of truth**: The converter is a one-way transformation. Edits are always made in YAML, then re-converted. This preserves the human-readable, version-controllable benefits of the YAML approach while eliminating the manual build step.
+
+**Validation built in**: The script includes a `--validate-only` mode that checks all YAML files for errors (missing fields, invalid colors, unknown connections) without generating output. This catches spec mistakes before they reach Companion.
+
 ## Open Questions Strategy
 
 All unknowns are handled with three mechanisms:

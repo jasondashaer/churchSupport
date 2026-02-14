@@ -4,7 +4,7 @@ A Bitfocus Companion + Stream Deck XL configuration for a bilingual (English/Jap
 
 ## What This Is
 
-This project provides **YAML specification files** and **documentation** for building a complete Bitfocus Companion configuration. Since `.companionconfig` files cannot be hand-crafted (they're SQLite database exports), these specs serve as the source of truth that an operator follows to recreate the configuration in Companion's web UI.
+This project provides **YAML specification files**, a **converter script**, and **documentation** for building a complete Bitfocus Companion configuration. The YAML specs are the source of truth; the converter (`scripts/yaml-to-companion.py`) generates a `.companionconfig` JSON file that can be imported directly into Companion's UI — no manual button-by-button recreation needed.
 
 ## Equipment Controlled
 
@@ -43,19 +43,35 @@ docs/
   COMPANION-UI-WALKTHROUGH.md # Step-by-step UI guide
   DESIGN-DECISIONS.md       # Rationale documentation
 scripts/
+  yaml-to-companion.py      # YAML → Companion JSON converter
   network-test.sh           # Ping all equipment
   port-check.sh             # Check required ports
   pre-service-check.sh      # Combined pre-service validation
   startup-sunday.sh         # Sunday startup sequence
   startup-midweek.sh        # Midweek startup sequence
   shutdown-graceful.sh      # Graceful shutdown
+output/                     # Generated configs (gitignored)
 ```
 
 ## Quick Start
 
+### Option A: Automated (recommended)
+
 1. Install [Bitfocus Companion](https://bitfocus.io/companion) v4.2+
 2. Connect Stream Deck XL via USB
-3. Follow `docs/SETUP-GUIDE-EN.md` (English) or `docs/セットアップガイド.md` (日本語) to build the configuration
+3. Generate the config:
+   ```bash
+   python3 scripts/yaml-to-companion.py --verbose
+   ```
+4. In Companion, go to **Import/Export** → **Import** → select `output/church-config.companionconfig`
+5. Update IP addresses in **Connections** tab per `docs/IP-CONFIGURATION.md`
+6. Test with `docs/TESTING-CHECKLIST.md`
+
+### Option B: Manual
+
+1. Install [Bitfocus Companion](https://bitfocus.io/companion) v4.2+
+2. Connect Stream Deck XL via USB
+3. Follow `docs/SETUP-GUIDE-EN.md` (English) or `docs/セットアップガイド.md` (日本語) to build the configuration button-by-button
 4. Update IP addresses per `docs/IP-CONFIGURATION.md`
 5. Test with `docs/TESTING-CHECKLIST.md`
 6. Export `.companionconfig` for deployment

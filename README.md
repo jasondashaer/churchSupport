@@ -20,6 +20,7 @@ This project provides **YAML specification files**, a **converter script**, and 
 ```
 config/
   connections.yaml          # All Companion module connections
+  parameters.yaml           # Equipment IPs, ports, passwords (edit this first!)
   pages/
     page01-home.yaml        # Role selector + startup/shutdown
     page02-slides-core.yaml # Slides - core controls
@@ -59,13 +60,14 @@ output/                     # Generated configs (gitignored)
 
 1. Install [Bitfocus Companion](https://bitfocus.io/companion) v4.2+
 2. Connect Stream Deck XL via USB
-3. Generate the config:
+3. Edit `config/parameters.yaml` with your equipment IPs, ports, and passwords
+4. Generate the config:
    ```bash
    python3 scripts/yaml-to-companion.py --verbose
    ```
-4. In Companion, go to **Import/Export** → **Import** → select `output/church-config.companionconfig`
-5. Update IP addresses in **Connections** tab per `docs/IP-CONFIGURATION.md`
-6. Test with `docs/TESTING-CHECKLIST.md`
+5. In Companion, go to **Import/Export** → **Import** → select `output/church-config.companionconfig`
+6. Verify connections are green in the **Connections** tab
+7. Test with `docs/TESTING-CHECKLIST.md`
 
 ### Option B: Manual
 

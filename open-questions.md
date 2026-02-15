@@ -12,15 +12,17 @@ When an answer is obtained: check the box, note the answer, and update the relev
 ## ProPresenter
 - [ ] What version of ProPresenter is installed? (6, 7, or 7.9+)
   - Determines module choice: `renewedvision-propresenter` (legacy) vs `renewedvision-propresenter-api` (v7.9+)
-- [ ] IP address of the ProPresenter computer
-- [ ] Is ProPresenter on the same machine as Companion?
+  - PP 21+ REQUIRES the API module (legacy Remote Classic was removed)
+  - Set in `config/parameters.yaml` under `connection_settings.propresenter.module`
+- [x] IP address of the ProPresenter computer → `127.0.0.1` (same machine as Companion)
+- [x] Is ProPresenter on the same machine as Companion? → Yes
 - [ ] Are presentations organized by playlist or folder?
 - [ ] What playlists/presentations are used each Sunday? (worship lyrics, sermon slides, announcements, etc.)
 - [ ] Is the ProPresenter stage display used? What layout?
 - [ ] Are ProPresenter timers/clocks used during service?
 
 ## OBS Studio
-- [ ] IP address of the OBS computer (same machine as ProPresenter? separate?)
+- [x] IP address of the OBS computer (same machine as ProPresenter? separate?) → `127.0.0.1` (same machine)
 - [ ] OBS version (must be 28+ for WebSocket v5)
 - [ ] WebSocket password (if set)
 - [ ] What scenes currently exist? What should be created?
@@ -72,10 +74,10 @@ When an answer is obtained: check the box, note the answer, and update the relev
 - [ ] What is the network switch/router model?
 
 ## Startup/Shutdown
-- [ ] Are ProPresenter and OBS on the same machine or different machines?
+- [x] Are ProPresenter and OBS on the same machine or different machines? → Same machine as Companion
 - [ ] What TV/display brand and model? (determines control module: Samsung, LG, etc.)
 - [ ] Are there smart outlets or a PDU in use? Brand/model?
-- [ ] Is the Companion computer the same as the ProPresenter computer?
+- [x] Is the Companion computer the same as the ProPresenter computer? → Yes, all on one machine
 - [ ] Are computers set up for Wake-on-LAN? (requires BIOS/UEFI setting)
 - [ ] Do computers have SSH enabled? (needed for remote shutdown)
 - [ ] What OS do the computers run? (macOS, Windows, Linux?)

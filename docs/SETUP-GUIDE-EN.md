@@ -48,17 +48,21 @@ Connections 7-8 (Display, Smart Outlet) are TBD pending equipment confirmation.
 
 ### Option A: Automated Import (Recommended)
 
-Generate and import a complete config in one step:
+1. **Edit parameters**: Open `config/parameters.yaml` and fill in:
+   - Machine IP addresses (or `127.0.0.1` for apps on the Companion PC)
+   - App-to-machine assignments
+   - Connection-specific settings (ProPresenter port & password, OBS password, etc.)
 
-```bash
-python3 scripts/yaml-to-companion.py --verbose
-```
+2. **Generate the config**:
+   ```bash
+   python3 scripts/yaml-to-companion.py --verbose
+   ```
 
-Then in Companion:
-1. Go to **Import/Export** tab
-2. Click **Import** → select `output/church-config.companionconfig`
-3. Choose **Full Import**
-4. Go to **Connections** tab and update IP addresses for actual equipment
+3. **Import into Companion**:
+   - Go to **Import/Export** tab
+   - Click **Import** → select `output/church-config.companionconfig`
+   - Choose **Full Import**
+   - Verify connections show green in the **Connections** tab
 
 Skip to Phase 5 after importing.
 

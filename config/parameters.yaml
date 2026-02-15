@@ -1,0 +1,104 @@
+# =======================================================
+# Church AV System - Equipment Parameters
+# =======================================================
+#
+# Edit this file with your actual equipment details,
+# then generate the Companion config:
+#
+#   python3 scripts/yaml-to-companion.py --verbose
+#
+# HOW IT WORKS:
+#   1. Define your machines and their IP addresses below
+#   2. Assign each app/device to the machine it runs on
+#   3. Add any connection-specific settings (passwords, ports)
+#   4. Run the converter — it fills in all required fields
+#
+# If multiple apps share a machine (e.g., ProPresenter and
+# OBS on the same PC), assign them to the same machine
+# name — the IP is resolved automatically.
+
+# -------------------------------------------------------
+# MACHINES
+# -------------------------------------------------------
+# Define each physical computer or network device.
+# Use "127.0.0.1" for apps on the same PC as Companion.
+
+machines:
+
+  companion-pc:
+    ip: "127.0.0.1"
+    description: "Main PC (Companion + ProPresenter + OBS)"
+    mac: ""                    # MAC address for Wake-on-LAN
+
+  # Add more machines if apps run on separate computers:
+  #
+  # av-pc:
+  #   ip: "192.168.1.100"
+  #   description: "Separate AV computer"
+  #   mac: "AA:BB:CC:DD:EE:FF"
+
+  atem:
+    ip: "192.168.1.XXX"       # ATEM hardware switcher
+    description: "Blackmagic ATEM switcher"
+
+  yamaha:
+    ip: "192.168.1.XXX"       # Yamaha TF1 mixer
+    description: "Yamaha TF1 mixer"
+
+# -------------------------------------------------------
+# APP → MACHINE ASSIGNMENTS
+# -------------------------------------------------------
+# Map each connection to the machine it runs on.
+# Use machine names from the section above.
+#
+# Example: If ProPresenter and OBS are on the same PC,
+# point both to "companion-pc" and they share the IP.
+
+assignments:
+  propresenter: "companion-pc"
+  obs: "companion-pc"
+  atem: "atem"
+  yamaha: "yamaha"
+  wol: "companion-pc"          # Target machine for Wake-on-LAN
+  ssh: "companion-pc"          # Target machine for SSH commands
+
+# -------------------------------------------------------
+# CONNECTION-SPECIFIC SETTINGS
+# -------------------------------------------------------
+# Module-specific settings beyond the IP address.
+# Only include fields you need to change from defaults.
+#
+# See docs/TROUBLESHOOTING.md for ProPresenter setup help.
+
+connection_settings:
+
+  propresenter:
+    # MODULE CHOICE — pick ONE:
+    #   "renewedvision-propresenter"     → Legacy WebSocket (PP 6 through 20)
+    #   "renewedvision-propresenter-api" → Newer HTTP API (PP 7.9+, REQUIRED for PP 21+)
+    module: "renewedvision-propresenter"
+
+    # PORT: Open ProPresenter > Settings > Network to find your actual port.
+    # ProPresenter assigns a RANDOM port each launch unless you lock it.
+    # To lock: type your preferred port number in the field and press Enter.
+    port: 1025
+
+    # PASSWORD: REQUIRED for the legacy module.
+    # Set in ProPresenter > Settings > Network > Remote > Controller password.
+    # Leaving this blank causes "Unexpected Server Response: 404" errors.
+    password: ""
+
+  obs:
+    port: 4455               # Default OBS WebSocket v5 port
+    password: ""             # OBS > Tools > WebSocket Server Settings
+
+  atem:
+    model_id: 0              # 0 = Auto Detect
+
+  yamaha:
+    model: "TF"              # Options: TF, CL/QL, DM3, DM7, PM
+
+  ssh:
+    username: ""
+    password: ""
+    port: 22

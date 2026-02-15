@@ -111,6 +111,135 @@ INTERNAL_OPTION_MAP = {
     "connection_enable": {"connection_id": "instance_id"},
 }
 
+# Complete module config schemas — every field with its default value.
+# These ensure Companion can save connections after import without
+# complaining about missing fields. Sourced from each module's GitHub repo.
+MODULE_CONFIGS = {
+    "renewedvision-propresenter": {
+        "ip_field": "host",
+        "defaults": {
+            "host": "",
+            "port": "20652",
+            "pass": "",
+            "use_sd": "no",
+            "sdport": "",
+            "sdpass": "",
+            "indexOfClockToWatch": "0",
+            "GUIDOfStageDisplayScreenToWatch": "",
+            "sendPresentationCurrentMsgs": "yes",
+            "typeOfPresentationRequest": "auto",
+            "clientVersion": "701",
+            "looksPolling": "disabled",
+            "timerPolling": "disabled",
+            "control_follower": "no",
+            "followerhost": "",
+            "followerport": "20652",
+            "followerpass": "",
+        },
+    },
+    "renewedvision-propresenter-api": {
+        "ip_field": "host",
+        "defaults": {
+            "host": "",
+            "port": 1025,
+            "timeout": 1000,
+            "custom_timer_format_string": "mm:ss",
+            "exta_debug_logs": False,  # typo is in the module source
+            "enable_midi_button_pusher": False,
+            "virtual_midi_port_name": "CompanionProPresenterMIDI",
+            "midi_port_dropdown": "virtual",
+            "companion_port": 8000,
+            "suppress_active_presentation_change_warning": False,
+        },
+    },
+    "obs-studio": {
+        "ip_field": "host",
+        "defaults": {
+            "host": "",
+            "port": "4455",
+            "pass": "",
+        },
+    },
+    "bmd-atem": {
+        "ip_field": "host",
+        "defaults": {
+            "bonjourHost": "",
+            "host": "",
+            "modelID": 0,
+            "presets": 0,
+            "fadeFps": 10,
+            "enableCameraControl": False,
+            "pollTimecode": False,
+        },
+    },
+    "yamaha-rcp": {
+        "ip_field": "host",
+        "defaults": {
+            "model": "TF",
+            "bonjourHost": "",
+            "host": "",
+            "metering": False,
+            "meterSpeed": 100,
+            "keepAlive": False,
+        },
+    },
+    "generic-pingandwake": {
+        "ip_field": "ip",
+        "defaults": {
+            "ip": "",
+            "mac": "00:00:00:00:00:00",
+            "arpLookup": True,
+            "timeout": 10,
+            "retryrate": 60000,
+            "wolPort": "9",
+            "wolBroadcast": "255.255.255.255",
+            "wolResend": "3",
+            "wolInterval": "100",
+            "verbose": False,
+        },
+    },
+    "generic-ssh": {
+        "ip_field": "host",
+        "defaults": {
+            "host": "",
+            "port": "22",
+            "username": "",
+            "password": "",
+            "privatekeypath": "",
+            "passphrase": "",
+            "keepaliveInterval": "0",
+            "handshakeCompleteTimeout": "20000",
+            "preferedCipher": 0,  # typo is in the module source
+        },
+    },
+}
+
+# Maps user-friendly parameter names (from parameters.yaml) to the actual
+# module config field names used by Companion. Only fields that differ need
+# an entry here — matching names are passed through unchanged.
+FRIENDLY_FIELD_MAP = {
+    "renewedvision-propresenter": {
+        "password": "pass",
+        "stage_display": "use_sd",
+        "stage_display_port": "sdport",
+        "stage_display_password": "sdpass",
+    },
+    "renewedvision-propresenter-api": {},
+    "obs-studio": {
+        "password": "pass",
+    },
+    "bmd-atem": {
+        "model_id": "modelID",
+    },
+    "yamaha-rcp": {},
+    "generic-pingandwake": {
+        "host": "ip",
+    },
+    "generic-ssh": {
+        "cipher": "preferedCipher",
+    },
+}
+
 
 # =============================================================================
 # SECTION 2: Mapping Layer
@@ -344,17 +473,30 @@ def build_control(yaml_button, connection_map):
 # SECTION 3: Structure Builders
 # =============================================================================
 
-def build_connections(yaml_connections):
+def build_connections(yaml_connections, params=None):
     """Build Companion instances dict and connection_map from connections.yaml.
+
+    If params (from parameters.yaml) is provided, resolves machine IPs from
+    assignments and applies connection-specific settings. All module config
+    fields are populated with defaults to ensure Companion can save connections.
 
     Returns (instances_dict, connection_map).
     """
     connection_map = {"internal": "internal"}
     instances = {}
 
+    machines = params.get("machines", {}) if params else {}
+    assignments = params.get("assignments", {}) if params else {}
+    param_settings = params.get("connection_settings", {}) if params else {}
+
     for i, conn in enumerate(yaml_connections):
         conn_id = conn.get("id", "")
         module = conn.get("module", "TBD")
+
+        # Allow module override from parameters
+        conn_params = param_settings.get(conn_id, {})
+        if "module" in conn_params:
+            module = conn_params["module"]
 
         # Skip TBD modules (display, pdu) - they have no valid module
         if module == "TBD":
@@ -363,7 +505,38 @@ def build_connections(yaml_connections):
         conn_uuid = str(uuid.uuid4())
         connection_map[conn_id] = conn_uuid
 
-        config = conn.get("config", {})
+        # Start with complete module defaults (all fields populated)
+        module_info = MODULE_CONFIGS.get(module, {})
+        config = dict(module_info.get("defaults", {}))
+        ip_field = module_info.get("ip_field", "host")
+        field_map = FRIENDLY_FIELD_MAP.get(module, {})
+
+        # Resolve machine IP from assignments
+        machine_name = assignments.get(conn_id)
+        if machine_name and machine_name in machines:
+            machine = machines[machine_name]
+            ip = machine.get("ip", "")
+            if ip:
+                config[ip_field] = ip
+            # For WOL, also set MAC from machine definition
+            if module == "generic-pingandwake":
+                mac = machine.get("mac", "")
+                if mac:
+                    config["mac"] = mac
+
+        # If no params, apply connections.yaml config as fallback
+        if not params:
+            yaml_config = conn.get("config", {})
+            for key, value in yaml_config.items():
+                mapped_key = field_map.get(key, key)
+                config[mapped_key] = value
+
+        # Apply connection-specific settings from parameters (highest priority)
+        for key, value in conn_params.items():
+            if key == "module":
+                continue  # already handled above
+            mapped_key = field_map.get(key, key)
+            config[mapped_key] = value
 
         instances[conn_uuid] = {
             "instance_type": module,
@@ -623,6 +796,24 @@ def load_all_pages(pages_dir):
     return result
 
 
+def load_parameters(path):
+    """Load parameters.yaml if it exists.
+
+    Returns parsed dict or None if file doesn't exist.
+    """
+    params_path = Path(path)
+    if not params_path.is_file():
+        return None
+    try:
+        with open(params_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data if data else None
+    except yaml.YAMLError as e:
+        print(f"ERROR: Failed to parse parameters file: {path}", file=sys.stderr)
+        print(f"  {e}", file=sys.stderr)
+        sys.exit(1)
+
+
 def write_json_output(data, output_path):
     """Write the Companion JSON config file."""
     output_dir = os.path.dirname(output_path)
@@ -771,6 +962,11 @@ def parse_args():
         help="Path to config/ directory (default: auto-detect from script location)",
     )
     parser.add_argument(
+        "--params",
+        default=None,
+        help="Path to parameters.yaml (default: config/parameters.yaml if it exists)",
+    )
+    parser.add_argument(
         "--output",
         default=None,
         help="Output file path (default: output/church-config.companionconfig)",
@@ -837,6 +1033,20 @@ def main():
     yaml_connections = connections_data.get("connections", [])
     yaml_variables = variables_data.get("custom_variables", [])
 
+    # Load parameters (auto-detect or from --params flag)
+    params_path = args.params or str(config_dir / "parameters.yaml")
+    params = load_parameters(params_path)
+    if params and args.verbose:
+        machines = params.get("machines", {})
+        assignments = params.get("assignments", {})
+        print(f"  Loaded parameters: {len(machines)} machines, {len(assignments)} assignments")
+        for conn_id, machine_name in assignments.items():
+            machine = machines.get(machine_name, {})
+            ip = machine.get("ip", "???")
+            print(f"    {conn_id} -> {machine_name} ({ip})")
+    elif not params and args.verbose:
+        print("  No parameters.yaml found, using connections.yaml config as fallback")
+
     if args.verbose:
         print(f"  Loaded {len(yaml_connections)} connections")
         print(f"  Loaded {len(yaml_variables)} custom variables")
@@ -866,7 +1076,7 @@ def main():
     if args.verbose:
         print("Building Companion configuration...")
 
-    instances, connection_map = build_connections(yaml_connections)
+    instances, connection_map = build_connections(yaml_connections, params)
 
     if args.verbose:
         print(f"  Built {len(instances)} connection instances")

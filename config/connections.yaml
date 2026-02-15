@@ -22,13 +22,17 @@ connections:
     enabled: true
     config:
       host: "192.168.1.XXX"
-      port: 20404
+      port: 1025
     notes:
-      - "OPEN QUESTION: ProPresenter version - if >= 7.9, switch module to renewedvision-propresenter-api"
-      - "OPEN QUESTION: IP address of ProPresenter computer"
-      - "OPEN QUESTION: Is ProPresenter on the same machine as Companion?"
-      - "Legacy module uses TCP port 20404 (configure in PP Preferences > Network)"
-      - "API module (v7.9+) uses HTTP, different port configuration"
+      - "OPEN QUESTION: ProPresenter version - determines module choice:"
+      - "  PP 6-20: renewedvision-propresenter (legacy WebSocket)"
+      - "  PP 7.9+: renewedvision-propresenter-api (recommended)"
+      - "  PP 21+:  renewedvision-propresenter-api (REQUIRED, legacy removed)"
+      - "PORT IS NOT FIXED: ProPresenter assigns a random port each launch."
+      - "  Lock it: PP > Settings > Network, type your port and press Enter."
+      - "LEGACY MODULE REQUIRES: password set in PP > Settings > Network > Controller."
+      - "  Missing password causes 'Unexpected Server Response: 404' error."
+      - "Set module choice and port in config/parameters.yaml"
 
   - id: obs
     module: "obs-studio"
@@ -64,8 +68,7 @@ connections:
     enabled: true
     config:
       host: "192.168.1.XXX"
-      port: 49280
-      model: "TF1"
+      model: "TF"
     notes:
       - "OPEN QUESTION: IP address of TF1"
       - "OPEN QUESTION: Channel assignment map (which mic/instrument on which channel)"

@@ -74,6 +74,7 @@ Row 3: [3,0] [3,1] [3,2] [3,3] [3,4] [3,5] [3,6] [3,7]
 
 ## File Conventions
 - Config specs: `config/connections.yaml`, `config/pages/pageNN-name.yaml`
+- Parameters: `config/parameters.yaml` (machine IPs, assignments, module settings — edit this first)
 - Documentation: `docs/*.md` (English primary)
 - Scripts: `scripts/*.sh` (bilingual output), `scripts/yaml-to-companion.py` (YAML→Companion converter)
 - Generated output: `output/` (gitignored, created by converter)

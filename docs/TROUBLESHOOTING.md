@@ -18,13 +18,55 @@ Common issues and their solutions, organized by symptom.
 
 ### ProPresenter connection red / ProPresenter接続が赤い
 
+**Common symptoms and fixes:**
+
+#### "Unexpected Server Response: 404" / サーバー応答エラー: 404
+
+This is the most common ProPresenter connection error. Three possible causes:
+
+**Cause 1: No controller password set (most common)**
+The legacy module requires a non-empty controller password. Without it, ProPresenter's WebSocket endpoint returns 404.
+1. Open ProPresenter > Settings > Network
+2. Under "ProPresenter Remote", check "Controller"
+3. **Set a non-empty password** in the controller password field
+4. Enter the same password in `config/parameters.yaml` under `connection_settings.propresenter.password`
+5. Re-run the converter and reimport, or update manually in Companion's Connections tab
+
+**Cause 2: ProPresenter v21+ (Remote Classic removed)**
+Starting with ProPresenter v21, the legacy "Remote Classic" API was removed entirely. The WebSocket endpoint no longer exists.
+1. Check your ProPresenter version: ProPresenter > About
+2. If v21 or newer, you **must** switch to the API module:
+   - In `config/parameters.yaml`, change `module` to `"renewedvision-propresenter-api"`
+   - Re-run the converter and reimport
+
+**Cause 3: Wrong port number**
+ProPresenter assigns a **random port** each time it launches unless you lock it.
+1. Open ProPresenter > Settings > Network
+2. Note the port number displayed
+3. To lock it: type the number back into the field and press Enter
+4. Update the port in `config/parameters.yaml`
+
+#### Connection goes green then red after ~5 seconds / 接続が一瞬緑になってすぐ赤になる
+
+This typically means TCP connects (green) but the WebSocket handshake fails (red). See the 404 causes above.
+
+#### General ProPresenter troubleshooting / 一般的なトラブルシューティング
+
 1. **Verify PP is running**: ProPresenter must be open and running
-2. **Check Network Link**: In ProPresenter Preferences > Network, verify:
-   - Network is enabled
-   - Port matches the YAML config (default: 20404)
-3. **Verify IP address**: Check PP computer's actual IP, update in Companion if changed
-4. **Firewall**: Ensure the PP computer's firewall allows inbound on port 20404
-5. **Restart**: Close and reopen ProPresenter, then toggle the connection in Companion (disable/wait/enable)
+2. **Check Network is enabled**: ProPresenter > Settings > Network > "Enable Network" must be ON
+3. **Check port**: The port in Companion must match what ProPresenter shows (it is NOT fixed at 20404)
+4. **Localhost**: If PP runs on the same machine as Companion, use `127.0.0.1` as the IP
+5. **Firewall**: Ensure the PP computer's firewall allows inbound on the configured port
+6. **Restart**: Close and reopen ProPresenter, then toggle the connection in Companion (disable/wait/enable)
+
+#### Which module should I use? / どのモジュールを使うべき?
+
+| ProPresenter Version | Recommended Module |
+|---------------------|-------------------|
+| PP 6 | `renewedvision-propresenter` (legacy) |
+| PP 7.0 - 7.8 | `renewedvision-propresenter` (legacy) |
+| PP 7.9 - 20 | `renewedvision-propresenter-api` (recommended) |
+| PP 21+ | `renewedvision-propresenter-api` (required) |
 
 ### OBS connection red / OBS接続が赤い
 

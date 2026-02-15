@@ -19,17 +19,18 @@ This document explains the rationale behind key architectural and design choices
 | 8-9 | Streaming / 配信 | OBS |
 | 10 | Emergency / 緊急 | All systems |
 
-## Why YAML Spec Files (Not Direct .companionconfig Generation)
+## Why YAML Spec Files
 
-**Key finding**: Companion's `.companionconfig` export format is a SQLite-backed compressed database. It cannot be reliably hand-crafted or programmatically generated outside of Companion.
+**Original assumption**: Companion's `.companionconfig` export format is a SQLite-backed compressed database that cannot be programmatically generated. This turned out to be incorrect — Companion v4.2+ supports importing pretty-formatted JSON via its Import/Export UI.
 
-**Chosen approach**: YAML specification files that document every connection, page, and button. An operator follows these specs to build the configuration in Companion's web UI button-by-button.
+**Chosen approach**: YAML specification files as the canonical source of truth, with a converter script (`scripts/yaml-to-companion.py`) that generates Companion-importable JSON. The YAML can also be followed manually as a button-by-button guide.
 
 **Benefits**:
 - Human-readable and version-controllable
 - Can be reviewed and modified without Companion running
 - Serves as living documentation of the entire configuration
 - OPEN QUESTION markers make unknowns visible and trackable
+- Automated conversion eliminates tedious manual button creation
 
 ## Bilingual Label Strategy
 
@@ -122,6 +123,19 @@ The Home page (Page 1, Row 2) displays three custom Companion variables alongsid
 **YAML specs remain the source of truth**: The converter is a one-way transformation. Edits are always made in YAML, then re-converted. This preserves the human-readable, version-controllable benefits of the YAML approach while eliminating the manual build step.
 
 **Validation built in**: The script includes a `--validate-only` mode that checks all YAML files for errors (missing fields, invalid colors, unknown connections) without generating output. This catches spec mistakes before they reach Companion.
+
+## Why a Separate Parameters File
+
+**Problem**: The original connections.yaml mixed equipment topology (what connects where) with device-specific details (IPs, passwords, ports). Users had to edit YAML spec files to change an IP address, and there was no way to express "ProPresenter and OBS run on the same machine" — you'd have to duplicate the IP in two places.
+
+**Solution**: `config/parameters.yaml` separates three concerns:
+1. **Machines** — physical computers/devices and their IP addresses
+2. **Assignments** — which app runs on which machine
+3. **Connection settings** — module-specific config (passwords, ports, model selection)
+
+**Key benefit**: When ProPresenter and OBS are on the same PC, you define the IP once under a machine name, then assign both apps to that machine. Change the IP in one place and both connections update.
+
+The converter merges `parameters.yaml` settings with complete module config defaults (every field populated) so that Companion can save connections immediately after import — no missing-field errors.
 
 ## Open Questions Strategy
 

@@ -14,7 +14,7 @@ The YAML specs remain the canonical source. Edit the YAML, run the converter, im
 
 | Equipment | Companion Module | Default Port | Protocol |
 |-----------|-----------------|-------------|----------|
-| ProPresenter | `renewedvision-propresenter` | 20404 | TCP |
+| ProPresenter | `renewedvision-propresenter-api` | 1025 | HTTP REST API |
 | OBS Studio | `obs-studio` | 4455 | WebSocket v5 |
 | Blackmagic ATEM | `bmd-atem` | 9910 | TCP |
 | Yamaha TF1 | `yamaha-rcp` | 49280 | TCP/RCP |
@@ -97,7 +97,7 @@ Row 3: [3,0] [3,1] [3,2] [3,3] [3,4] [3,5] [3,6] [3,7]
 ## Open Questions
 See `open-questions.md` for full tracker. Critical unknowns:
 - All equipment IP addresses
-- ProPresenter version (determines module choice: legacy vs API)
+- ~~ProPresenter version~~ → Resolved: PP 21+, using `renewedvision-propresenter-api`
 - ATEM model and input assignments
 - OBS scene names
 - TF1 channel assignments and scene numbers

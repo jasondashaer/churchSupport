@@ -17,7 +17,7 @@ connections:
   # === Primary AV Systems ===
 
   - id: propresenter
-    module: "renewedvision-propresenter"
+    module: "renewedvision-propresenter-api"
     label: "ProPresenter"
     enabled: true
     config:

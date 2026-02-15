@@ -10,9 +10,8 @@ When an answer is obtained: check the box, note the answer, and update the relev
 ---
 
 ## ProPresenter
-- [ ] What version of ProPresenter is installed? (6, 7, or 7.9+)
-  - Determines module choice: `renewedvision-propresenter` (legacy) vs `renewedvision-propresenter-api` (v7.9+)
-  - PP 21+ REQUIRES the API module (legacy Remote Classic was removed)
+- [x] What version of ProPresenter is installed? (6, 7, or 7.9+) → **ProPresenter 21+**
+  - Using `renewedvision-propresenter-api` module (REQUIRED for PP 21+, legacy Remote Classic was removed)
   - Set in `config/parameters.yaml` under `connection_settings.propresenter.module`
 - [x] IP address of the ProPresenter computer → `127.0.0.1` (same machine as Companion)
 - [x] Is ProPresenter on the same machine as Companion? → Yes

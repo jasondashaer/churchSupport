@@ -75,8 +75,8 @@ connection_settings:
   propresenter:
     # MODULE CHOICE — pick ONE:
     #   "renewedvision-propresenter"     → Legacy WebSocket (PP 6 through 20)
-    #   "renewedvision-propresenter-api" → Newer HTTP API (PP 7.9+, REQUIRED for PP 21+)
-    module: "renewedvision-propresenter"
+    #   "renewedvision-propresenter-api" → HTTP API (PP 7.9+, REQUIRED for PP 21+)
+    module: "renewedvision-propresenter-api"
 
     # PORT: Open ProPresenter > Settings > Network to find your actual port.
     # ProPresenter assigns a RANDOM port each launch unless you lock it.

@@ -367,6 +367,18 @@ MODULE_ACTION_MAP = {
         "pause_record": {"definitionId": "pause_recording", "default_options": {}},
         "toggle_record": {"definitionId": "StartStopRecording", "default_options": {}},
         "transition": {"definitionId": "do_transition", "default_options": {}},
+        "set_profile": {
+            "definitionId": "set_profile",
+            "default_options": {"profile": ""},
+        },
+        "set_source_visibility": {
+            "definitionId": "set_source_visibility",
+            "default_options": {},
+        },
+        "source_mute_toggle": {
+            "definitionId": "toggle_mute",
+            "default_options": {},
+        },
     },
     "bmd-atem": {
         "program_input": {
@@ -407,6 +419,27 @@ MODULE_ACTION_MAP = {
         },
         "save_startup_state": {"definitionId": "saveStartupState", "default_options": {}},
         "clear_startup_state": {"definitionId": "clearStartupState", "default_options": {}},
+        # Aliases used in YAML pages (different names, same module actions)
+        "usk_on_air": {
+            "definitionId": "usk",
+            "default_options": {"mixeffect": 0, "onair": "toggle"},
+        },
+        "dsk_on_air": {
+            "definitionId": "dsk",
+            "default_options": {"onair": "toggle"},
+        },
+        "run_macro": {
+            "definitionId": "macrorun",
+            "default_options": {"action": "run"},
+        },
+        "transition_style": {
+            "definitionId": "transitionStyle",
+            "default_options": {"mixeffect": 0},
+        },
+        "transition_rate": {
+            "definitionId": "transitionRate",
+            "default_options": {"mixeffect": 0},
+        },
     },
     "yamaha-rcp": {
         # Yamaha uses dynamic RCP-address-derived action IDs.
@@ -444,6 +477,14 @@ MODULE_ACTION_MAP = {
             "definitionId": "MIXER:Current/MuteMaster/On",
             "default_options": {"Val": "Toggle"},
         },
+        "recall_inc": {
+            "definitionId": "MIXER:Lib/Bank/Scene/RecallInc",
+            "default_options": {},
+        },
+        "recall_dec": {
+            "definitionId": "MIXER:Lib/Bank/Scene/RecallDec",
+            "default_options": {},
+        },
     },
     "generic-pingandwake": {
         "wake": {"definitionId": "send_wol", "default_options": {}},
@@ -463,6 +504,8 @@ MODULE_OPTION_MAP = {
         "me": "mixeffect",
         # "input" stays "input" — no remap needed
         "macro": "macro",
+        "keyer": "key",
+        "state": "onair",
     },
     "yamaha-rcp": {
         # Channel-based options are handled specially in _yamaha_resolve_options()
@@ -490,13 +533,30 @@ MODULE_FEEDBACK_MAP = {
     "preview_input": {"definitionId": "preview_bg", "module": "bmd-atem"},
     # Yamaha feedbacks
     "channel_muted": {"definitionId": None, "module": "yamaha-rcp"},  # resolved dynamically
+    # ATEM keyer feedbacks
+    "transition_style": {"definitionId": "transitionStyle", "module": "bmd-atem"},
+    "usk_on_air": {"definitionId": "usk_bg", "module": "bmd-atem"},
+    "dsk_on_air": {"definitionId": "dsk_bg", "module": "bmd-atem"},
+    # OBS source visibility feedback
+    "source_visible": {"definitionId": "sceneItemEnabled", "module": "obs-studio"},
 }
 
 # ATEM feedback option remapping (same as action option remap)
 FEEDBACK_OPTION_MAP = {
     "bmd-atem": {
         "me": "mixeffect",
+        "keyer": "key",
     },
+}
+
+# ATEM transition style string-to-number mapping
+ATEM_TRANSITION_STYLE_MAP = {
+    "mix": 0,
+    "dip": 1,
+    "wipe": 2,
+    "dve": 3,
+    "sting": 4,
+    "stinger": 4,
 }
 
 
@@ -644,6 +704,9 @@ def _atem_resolve_options(yaml_options):
     Handles:
     - 'me' -> 'mixeffect'
     - 'input: "black"' -> 'input: 0'
+    - 'keyer' -> 'key'
+    - 'state' -> 'onair'
+    - 'style: "mix"' -> 'style: 0' (string to number conversion)
     - 'macro' -> 'macro'
     """
     result = {}
@@ -653,6 +716,9 @@ def _atem_resolve_options(yaml_options):
         # ATEM represents 'black' as input 0
         if key == "input" and str(v).lower() == "black":
             v = 0
+        # ATEM transition styles are numeric
+        if key == "style" and isinstance(v, str):
+            v = ATEM_TRANSITION_STYLE_MAP.get(v.lower(), v)
         result[key] = v
     return result
 
@@ -671,6 +737,12 @@ def build_action(yaml_action, connection_map, connection_module_map=None):
         conn_id = "internal"
         def_id = INTERNAL_ACTION_MAP.get(action_name, action_name)
         options = _remap_options(yaml_options, INTERNAL_OPTION_MAP.get(action_name))
+
+        # Special: set_page needs a 'controller' option to specify which
+        # surface should change pages. Without this, Companion v4.2+ silently
+        # ignores the action.
+        if action_name == "set_page":
+            options.setdefault("controller", "self")
 
         # Special: connection_disable/enable both map to instance_control
         # with different 'enable' values

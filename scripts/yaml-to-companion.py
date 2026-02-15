@@ -30,8 +30,9 @@ are isolated in FIELD_MAP and the mapping functions for easy tuning.
 import argparse
 import json
 import os
+import secrets
+import string
 import sys
-import uuid
 from pathlib import Path
 
 try:
@@ -47,12 +48,21 @@ except ImportError:
 # SECTION 1: Constants & Configuration
 # =============================================================================
 
-FORMAT_VERSION = 6
+FORMAT_VERSION = 9
 EXPORT_TYPE = "full"
 COMPANION_BUILD = "yaml-converter-v1.0"
 
 GRID_ROWS = 4
 GRID_COLS = 8
+
+# Nanoid alphabet — matches nanoid's URL-safe default alphabet
+_NANOID_ALPHABET = string.ascii_letters + string.digits + "_-"
+_NANOID_SIZE = 21
+
+
+def generate_nanoid(size=_NANOID_SIZE):
+    """Generate a nanoid-style random ID matching Companion's ID format."""
+    return "".join(secrets.choice(_NANOID_ALPHABET) for _ in range(size))
 
 GRID_SIZE = {
     "minColumn": 0,
@@ -144,6 +154,7 @@ MODULE_CONFIGS = {
         "defaults": {
             "host": "",
             "port": 1025,
+            "password": "",
             "timeout": 1000,
             "custom_timer_format_string": "mm:ss",
             "exta_debug_logs": False,  # typo is in the module source
@@ -158,7 +169,7 @@ MODULE_CONFIGS = {
         "ip_field": "host",
         "defaults": {
             "host": "",
-            "port": "4455",
+            "port": 4455,
             "pass": "",
         },
     },
@@ -183,6 +194,8 @@ MODULE_CONFIGS = {
             "metering": False,
             "meterSpeed": 100,
             "keepAlive": False,
+            "kaIntervalL": 10,
+            "kaIntervalH": 50,
         },
     },
     "generic-pingandwake": {
@@ -705,7 +718,7 @@ def build_action(yaml_action, connection_map, connection_module_map=None):
 
     return {
         FIELD_MAP["action_type_key"]: FIELD_MAP["action_type_value"],
-        FIELD_MAP["action_id_key"]: str(uuid.uuid4()),
+        FIELD_MAP["action_id_key"]: generate_nanoid(),
         FIELD_MAP["action_def_key"]: def_id,
         FIELD_MAP["action_conn_key"]: conn_id,
         "headline": None,
@@ -831,7 +844,7 @@ def build_feedback(yaml_feedback, connection_map, connection_module_map=None):
 
     return {
         FIELD_MAP["action_type_key"]: FIELD_MAP["feedback_type_value"],
-        FIELD_MAP["action_id_key"]: str(uuid.uuid4()),
+        FIELD_MAP["action_id_key"]: generate_nanoid(),
         FIELD_MAP["action_def_key"]: def_id,
         FIELD_MAP["action_conn_key"]: conn_id,
         "headline": None,
@@ -853,6 +866,8 @@ def build_step(yaml_press_actions, connection_map, connection_module_map=None, s
         "action_sets": {
             FIELD_MAP["press_key"]: actions,
             FIELD_MAP["release_key"]: [],
+            "rotate_left": [],
+            "rotate_right": [],
         },
         "options": {
             "runWhileHeld": [],
@@ -875,17 +890,18 @@ def build_control(yaml_button, connection_map, connection_module_map=None):
     # Build steps
     steps = {}
     press_actions = yaml_button.get("actions", {}).get("press", [])
-    step1_id = str(uuid.uuid4())
+    step1_id = generate_nanoid()
     steps[step1_id] = build_step(press_actions, connection_map, connection_module_map, "")
 
     if is_multistep:
         step2_actions = yaml_button.get("step_2_actions", {}).get("press", [])
-        step2_id = str(uuid.uuid4())
+        step2_id = generate_nanoid()
         steps[step2_id] = build_step(step2_actions, connection_map, connection_module_map, "Confirm")
 
     # Button options
     options = {
         "rotaryActions": False,
+        "stepExpression": "",
     }
     if is_multistep:
         options["stepProgression"] = "auto"
@@ -939,7 +955,7 @@ def build_connections(yaml_connections, params=None):
         if module == "TBD":
             continue
 
-        conn_uuid = str(uuid.uuid4())
+        conn_uuid = generate_nanoid()
         connection_map[conn_id] = conn_uuid
         connection_module_map[conn_id] = module
 
@@ -978,12 +994,14 @@ def build_connections(yaml_connections, params=None):
 
         instances[conn_uuid] = {
             "instance_type": module,
+            "moduleInstanceType": "connection",
             "label": conn.get("label", conn_id),
             "config": config,
             "enabled": conn.get("enabled", True),
             "isFirstInit": False,
             "lastUpgradeIndex": -1,
             "sortOrder": i,
+            "secrets": {},
         }
 
     return instances, connection_map, connection_module_map
@@ -1023,13 +1041,18 @@ def build_page(yaml_page_data, connection_map, connection_module_map=None):
 
     return {
         "name": page_name,
+        "id": generate_nanoid(),
         "controls": controls,
         "gridSize": dict(GRID_SIZE),
     }
 
 
 def build_full_export(pages_dict, instances, custom_variables):
-    """Assemble the top-level Companion export structure."""
+    """Assemble the top-level Companion export structure.
+
+    Includes all top-level keys required by Companion v4.2.4 (format version 9).
+    Missing keys cause Companion to silently discard actions during import.
+    """
     return {
         "version": FORMAT_VERSION,
         "type": EXPORT_TYPE,
@@ -1037,6 +1060,14 @@ def build_full_export(pages_dict, instances, custom_variables):
         "pages": pages_dict,
         "instances": instances,
         "custom_variables": custom_variables,
+        "triggers": {},
+        "triggerCollections": [],
+        "customVariablesCollections": [],
+        "expressionVariables": {},
+        "expressionVariablesCollections": [],
+        "connectionCollections": [],
+        "surfaces": {},
+        "surfaceGroups": {},
     }
 
 
@@ -1268,7 +1299,7 @@ def write_json_output(data, output_path):
 
 def generate_sample():
     """Generate a minimal sample config for format comparison."""
-    conn_map = {"internal": "internal", "sample_module": str(uuid.uuid4())}
+    conn_map = {"internal": "internal", "sample_module": generate_nanoid()}
 
     sample_button = {
         "position": [0, 0],
@@ -1353,29 +1384,29 @@ def generate_sample():
         }
     }
 
-    sample_export = {
-        "version": FORMAT_VERSION,
-        "type": EXPORT_TYPE,
-        "companionBuild": COMPANION_BUILD,
-        "pages": {
+    sample_export = build_full_export(
+        pages_dict={
             "1": {
                 "name": "Sample Page",
+                "id": generate_nanoid(),
                 "controls": controls,
                 "gridSize": dict(GRID_SIZE),
             }
         },
-        "instances": {
+        instances={
             conn_map["sample_module"]: {
                 "instance_type": "generic-module",
+                "moduleInstanceType": "connection",
                 "label": "Sample Module",
                 "config": {"host": "192.168.1.100"},
                 "enabled": True,
                 "isFirstInit": False,
                 "lastUpgradeIndex": -1,
                 "sortOrder": 0,
+                "secrets": {},
             }
         },
-        "custom_variables": {
+        custom_variables={
             "sample_var": {
                 "description": "A sample variable",
                 "defaultValue": "hello",
@@ -1383,7 +1414,7 @@ def generate_sample():
                 "sortOrder": 0,
             }
         },
-    }
+    )
 
     return sample_export
 

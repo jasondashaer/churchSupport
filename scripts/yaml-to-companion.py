@@ -91,24 +91,26 @@ FIELD_MAP = {
 }
 
 # Internal action name mapping: our YAML names -> Companion internal action IDs.
-# These may need adjustment after testing with a real Companion instance.
+# Verified against Companion v4 source (companion/lib/Internal/Actions.ts).
 INTERNAL_ACTION_MAP = {
-    "set_page": "button_page_set",
-    "wait": "action_delay",
-    "run_shell_path": "shell_path",
-    "button_step": "button_step",
-    "connection_disable": "instance_control_disable",
-    "connection_enable": "instance_control_enable",
+    "set_page": "set_page",
+    "wait": "wait",
+    "run_shell_path": "exec",
+    "button_step": "bank_current_step",
+    "connection_disable": "instance_control",
+    "connection_enable": "instance_control",
+    "custom_variable_set": "custom_variable_set_value",
 }
 
 # Internal action option remapping: our YAML option names -> Companion option names
 INTERNAL_OPTION_MAP = {
     "set_page": {"page": "page"},
-    "wait": {"duration_ms": "delay"},
-    "run_shell_path": {"path": "path"},
+    "wait": {"duration_ms": "time"},
+    "run_shell_path": {"path": "path", "timeout": "timeout"},
     "button_step": {"step": "step"},
     "connection_disable": {"connection_id": "instance_id"},
     "connection_enable": {"connection_id": "instance_id"},
+    "custom_variable_set": {"variable": "name", "value": "value"},
 }
 
 # Complete module config schemas — every field with its default value.
@@ -132,7 +134,7 @@ MODULE_CONFIGS = {
             "looksPolling": "disabled",
             "timerPolling": "disabled",
             "control_follower": "no",
-            "followerhost": "",
+            "followerhost": "0.0.0.0",
             "followerport": "20652",
             "followerpass": "",
         },
@@ -240,6 +242,250 @@ FRIENDLY_FIELD_MAP = {
     },
 }
 
+# =============================================================================
+# MODULE ACTION MAPS — YAML symbolic names -> actual module definitionIds
+# =============================================================================
+# Each module dict maps YAML action name -> {definitionId, default_options}.
+# YAML options are merged on top of default_options (YAML wins).
+# Verified against each module's GitHub source.
+
+MODULE_ACTION_MAP = {
+    "renewedvision-propresenter-api": {
+        "next_slide": {
+            "definitionId": "activePresentationOperation",
+            "default_options": {"active_presentation_operation": "trigger_next"},
+        },
+        "previous_slide": {
+            "definitionId": "activePresentationOperation",
+            "default_options": {"active_presentation_operation": "trigger_previous"},
+        },
+        "clear_slide": {
+            "definitionId": "clearLayerOrGroup",
+            "default_options": {
+                "clear_layer_or_group_dropdown": "layer",
+                "clear_layer_dropdown": "slide",
+            },
+        },
+        "clear_all": {
+            "definitionId": "clearLayerOrGroup",
+            "default_options": {
+                "clear_layer_or_group_dropdown": "group",
+                "clear_group_id_dropdown": "",
+            },
+        },
+        "clear_to_logo": {
+            "definitionId": "lookIdTrigger",
+            "default_options": {"look_id_dropdown": "", "look_id_text": ""},
+        },
+        "clear_background": {
+            "definitionId": "clearLayerOrGroup",
+            "default_options": {
+                "clear_layer_or_group_dropdown": "layer",
+                "clear_layer_dropdown": "media",
+            },
+        },
+        "clear_messages": {
+            "definitionId": "clearLayerOrGroup",
+            "default_options": {
+                "clear_layer_or_group_dropdown": "layer",
+                "clear_layer_dropdown": "messages",
+            },
+        },
+        "trigger_playlist": {
+            "definitionId": "specificPlaylistOperation",
+            "default_options": {"specific_playlist_operation": "trigger_index"},
+        },
+        "start_clock": {
+            "definitionId": "timerOperation",
+            "default_options": {"timer_operation": "start"},
+        },
+        "stop_clock": {
+            "definitionId": "timerOperation",
+            "default_options": {"timer_operation": "stop"},
+        },
+        "reset_clock": {
+            "definitionId": "timerOperation",
+            "default_options": {"timer_operation": "reset"},
+        },
+        "show_message": {
+            "definitionId": "messageOperation",
+            "default_options": {"message_operation": "show"},
+        },
+        "hide_message": {
+            "definitionId": "messageOperation",
+            "default_options": {"message_operation": "hide"},
+        },
+        "pro7_set_look": {
+            "definitionId": "lookIdTrigger",
+            "default_options": {"look_id_dropdown": ""},
+        },
+        "stage_display_layout": {
+            "definitionId": "stageDisplayOperation",
+            "default_options": {"stagedisplay_operation": "set_layout"},
+        },
+        # Typo 'marco' is in the actual module source code
+        "pro7_trigger_macro": {
+            "definitionId": "marcoIdTrigger",
+            "default_options": {"macro_id_dropdown": ""},
+        },
+    },
+    # Legacy PP module (PP 6-20) — same YAML names, different IDs
+    "renewedvision-propresenter": {
+        "next_slide": {"definitionId": "next", "default_options": {}},
+        "previous_slide": {"definitionId": "prev", "default_options": {}},
+        "clear_slide": {"definitionId": "clearall", "default_options": {}},
+        "clear_all": {"definitionId": "clearall", "default_options": {}},
+        "clear_to_logo": {"definitionId": "clearall", "default_options": {}},
+    },
+    "obs-studio": {
+        "set_program_scene": {
+            "definitionId": "set_scene",
+            "default_options": {"scene": ""},
+        },
+        "preview_scene": {
+            "definitionId": "preview_scene",
+            "default_options": {"scene": ""},
+        },
+        "start_streaming": {"definitionId": "start_streaming", "default_options": {}},
+        "stop_streaming": {"definitionId": "stop_streaming", "default_options": {}},
+        "toggle_streaming": {"definitionId": "StartStopStreaming", "default_options": {}},
+        "start_record": {"definitionId": "start_recording", "default_options": {}},
+        "stop_record": {"definitionId": "stop_recording", "default_options": {}},
+        "pause_record": {"definitionId": "pause_recording", "default_options": {}},
+        "toggle_record": {"definitionId": "StartStopRecording", "default_options": {}},
+        "transition": {"definitionId": "do_transition", "default_options": {}},
+    },
+    "bmd-atem": {
+        "program_input": {
+            "definitionId": "program",
+            "default_options": {"mixeffect": 0},
+        },
+        "preview_input": {
+            "definitionId": "preview",
+            "default_options": {"mixeffect": 0},
+        },
+        "auto_transition": {
+            "definitionId": "auto",
+            "default_options": {"mixeffect": 0},
+        },
+        "cut": {
+            "definitionId": "cut",
+            "default_options": {"mixeffect": 0},
+        },
+        "usk_toggle": {
+            "definitionId": "usk",
+            "default_options": {"mixeffect": 0, "onair": "toggle"},
+        },
+        "dsk_toggle": {
+            "definitionId": "dsk",
+            "default_options": {"onair": "toggle"},
+        },
+        "recall_macro": {
+            "definitionId": "macrorun",
+            "default_options": {"action": "run"},
+        },
+        "macro_run": {
+            "definitionId": "macrorun",
+            "default_options": {"action": "run"},
+        },
+        "fade_to_black": {
+            "definitionId": "fadeToBlackAuto",
+            "default_options": {"mixeffect": 0},
+        },
+        "save_startup_state": {"definitionId": "saveStartupState", "default_options": {}},
+        "clear_startup_state": {"definitionId": "clearStartupState", "default_options": {}},
+    },
+    "yamaha-rcp": {
+        # Yamaha uses dynamic RCP-address-derived action IDs.
+        # The definitionId depends on the channel type (InCh, St, DCA, etc.).
+        # A None definitionId means it's resolved dynamically in build_action().
+        "mute_toggle": {
+            "definitionId": None,  # resolved by _yamaha_action_id()
+            "default_options": {"Val": "Toggle"},
+        },
+        "mute_channel": {
+            "definitionId": None,  # resolved by _yamaha_action_id()
+            "default_options": {},  # Val set from mute option
+        },
+        "fader_level": {
+            "definitionId": None,  # resolved by _yamaha_action_id()
+            "default_options": {},
+        },
+        "scene_recall": {
+            "definitionId": "MIXER:Lib/Bank/Scene/Recall",
+            "default_options": {},
+        },
+        "scene_store": {
+            "definitionId": "MIXER:Lib/Bank/Scene/Store",
+            "default_options": {},
+        },
+        "dca_mute": {
+            "definitionId": "MIXER:Current/DCA/Fader/On",
+            "default_options": {"Val": "Toggle"},
+        },
+        "dca_level": {
+            "definitionId": "MIXER:Current/DCA/Fader/Level",
+            "default_options": {},
+        },
+        "master_mute": {
+            "definitionId": "MIXER:Current/MuteMaster/On",
+            "default_options": {"Val": "Toggle"},
+        },
+    },
+    "generic-pingandwake": {
+        "wake": {"definitionId": "send_wol", "default_options": {}},
+    },
+}
+
+# =============================================================================
+# MODULE OPTION MAPS — YAML option names -> module option names
+# =============================================================================
+# Per-module remapping of YAML option keys to the keys the module expects.
+
+MODULE_OPTION_MAP = {
+    "obs-studio": {
+        "scene_name": "scene",
+    },
+    "bmd-atem": {
+        "me": "mixeffect",
+        # "input" stays "input" — no remap needed
+        "macro": "macro",
+    },
+    "yamaha-rcp": {
+        # Channel-based options are handled specially in _yamaha_resolve_options()
+    },
+}
+
+# =============================================================================
+# MODULE FEEDBACK MAPS — YAML feedback names -> actual module feedback IDs
+# =============================================================================
+
+MODULE_FEEDBACK_MAP = {
+    # connection_status is NOT a real module feedback — it must redirect
+    # to internal instance_status feedback (tracks connection health).
+    "connection_status": {
+        "definitionId": "instance_status",
+        "redirect_to_internal": True,
+    },
+    # OBS feedbacks
+    "streaming_active": {"definitionId": "streaming", "module": "obs-studio"},
+    "recording_active": {"definitionId": "recording", "module": "obs-studio"},
+    "recording_paused": {"definitionId": "recording_paused", "module": "obs-studio"},
+    "scene_active": {"definitionId": "scene_active", "module": "obs-studio"},
+    # ATEM feedbacks
+    "program_input": {"definitionId": "program_bg", "module": "bmd-atem"},
+    "preview_input": {"definitionId": "preview_bg", "module": "bmd-atem"},
+    # Yamaha feedbacks
+    "channel_muted": {"definitionId": None, "module": "yamaha-rcp"},  # resolved dynamically
+}
+
+# ATEM feedback option remapping (same as action option remap)
+FEEDBACK_OPTION_MAP = {
+    "bmd-atem": {
+        "me": "mixeffect",
+    },
+}
+
 
 # =============================================================================
 # SECTION 2: Mapping Layer
@@ -310,11 +556,8 @@ def build_button_style(yaml_style):
     }
 
 
-def remap_action_options(action_name, options, connection_name):
-    """Remap action option keys for internal actions."""
-    if connection_name != "internal":
-        return dict(options) if options else {}
-    opt_map = INTERNAL_OPTION_MAP.get(action_name, {})
+def _remap_options(options, opt_map):
+    """Remap option keys using an option map dict."""
     if not opt_map or not options:
         return dict(options) if options else {}
     remapped = {}
@@ -323,22 +566,142 @@ def remap_action_options(action_name, options, connection_name):
     return remapped
 
 
-def build_action(yaml_action, connection_map):
-    """Map a single YAML action to a Companion ActionEntityModel."""
+def _yamaha_channel_to_index(channel_str):
+    """Convert Yamaha channel string to 0-based integer index.
+
+    Examples:
+        'InCh/001' -> 0
+        'InCh/015' -> 14
+        'St/001'   -> 0
+        'DCA/001'  -> 0
+    """
+    if not channel_str or "/" not in str(channel_str):
+        return 0
+    parts = str(channel_str).split("/")
+    try:
+        return int(parts[-1]) - 1
+    except (ValueError, IndexError):
+        return 0
+
+
+def _yamaha_resolve_action(action_name, yaml_options):
+    """Resolve Yamaha dynamic action IDs and options.
+
+    Returns (definitionId, resolved_options).
+    """
+    channel = yaml_options.get("channel", "")
+    options = {}
+
+    # Determine channel type prefix for dynamic IDs
+    if isinstance(channel, str) and "/" in channel:
+        ch_type = channel.split("/")[0]  # e.g., "InCh", "St", "DCA"
+        options["X"] = _yamaha_channel_to_index(channel)
+    elif channel == "stereo_out":
+        ch_type = "St"
+        options["X"] = 0
+    else:
+        ch_type = "InCh"
+        options["X"] = 0
+
+    if action_name in ("mute_toggle", "mute_channel"):
+        def_id = f"MIXER:Current/{ch_type}/Fader/On"
+        if action_name == "mute_channel":
+            mute_val = yaml_options.get("mute", True)
+            options["Val"] = "Off" if mute_val else "On"
+        else:
+            options["Val"] = "Toggle"
+    elif action_name == "fader_level":
+        def_id = f"MIXER:Current/{ch_type}/Fader/Level"
+        if "level" in yaml_options:
+            options["Val"] = yaml_options["level"]
+    else:
+        def_id = action_name  # fallback
+
+    # Copy over any remaining options not already handled
+    for k, v in yaml_options.items():
+        if k not in ("channel", "mute", "level"):
+            options[k] = v
+
+    return def_id, options
+
+
+def _atem_resolve_options(yaml_options):
+    """Convert ATEM YAML options to module options.
+
+    Handles:
+    - 'me' -> 'mixeffect'
+    - 'input: "black"' -> 'input: 0'
+    - 'macro' -> 'macro'
+    """
+    result = {}
+    opt_map = MODULE_OPTION_MAP.get("bmd-atem", {})
+    for k, v in (yaml_options or {}).items():
+        key = opt_map.get(k, k)
+        # ATEM represents 'black' as input 0
+        if key == "input" and str(v).lower() == "black":
+            v = 0
+        result[key] = v
+    return result
+
+
+def build_action(yaml_action, connection_map, connection_module_map=None):
+    """Map a single YAML action to a Companion ActionEntityModel.
+
+    Uses MODULE_ACTION_MAP to translate YAML symbolic action names
+    into actual Companion module definitionIds with correct options.
+    """
     conn_name = yaml_action.get("connection", "internal")
     action_name = yaml_action.get("action", "")
+    yaml_options = yaml_action.get("options", {}) or {}
 
-    # Resolve connection ID
     if conn_name == "internal":
         conn_id = "internal"
         def_id = INTERNAL_ACTION_MAP.get(action_name, action_name)
+        options = _remap_options(yaml_options, INTERNAL_OPTION_MAP.get(action_name))
+
+        # Special: connection_disable/enable both map to instance_control
+        # with different 'enable' values
+        if action_name == "connection_disable":
+            # Resolve the friendly connection name to UUID
+            target = options.get("instance_id", "")
+            if target in connection_map:
+                options["instance_id"] = connection_map[target]
+            options["enable"] = "false"
+        elif action_name == "connection_enable":
+            target = options.get("instance_id", "")
+            if target in connection_map:
+                options["instance_id"] = connection_map[target]
+            options["enable"] = "true"
     else:
         conn_id = connection_map.get(conn_name, conn_name)
-        def_id = action_name
 
-    options = remap_action_options(
-        action_name, yaml_action.get("options", {}), conn_name
-    )
+        # Look up the module for this connection
+        module = (connection_module_map or {}).get(conn_name, "")
+        module_actions = MODULE_ACTION_MAP.get(module, {})
+        action_def = module_actions.get(action_name)
+
+        if action_def:
+            def_id = action_def["definitionId"]
+            # Start with default options, then merge YAML options on top
+            options = dict(action_def.get("default_options", {}))
+
+            # Special handling per module
+            if module == "yamaha-rcp" and def_id is None:
+                def_id, options = _yamaha_resolve_action(action_name, yaml_options)
+            elif module == "bmd-atem":
+                atem_opts = _atem_resolve_options(yaml_options)
+                options.update(atem_opts)
+            elif module == "obs-studio":
+                obs_map = MODULE_OPTION_MAP.get("obs-studio", {})
+                remapped = _remap_options(yaml_options, obs_map)
+                options.update(remapped)
+            else:
+                # Generic: merge YAML options directly
+                options.update(yaml_options)
+        else:
+            # No mapping found — pass through as-is (may need manual fix)
+            def_id = action_name
+            options = dict(yaml_options)
 
     return {
         FIELD_MAP["action_type_key"]: FIELD_MAP["action_type_value"],
@@ -387,23 +750,92 @@ def build_feedback_style(yaml_feedback):
     return result, is_inverted
 
 
-def build_feedback(yaml_feedback, connection_map):
-    """Map a YAML feedback to a Companion FeedbackEntityModel."""
-    conn_name = yaml_feedback.get("connection", "internal")
-    if conn_name == "internal":
-        conn_id = "internal"
+def _yamaha_resolve_feedback(feedback_name, yaml_options):
+    """Resolve Yamaha dynamic feedback IDs."""
+    channel = yaml_options.get("channel", "")
+    options = {}
+
+    if isinstance(channel, str) and "/" in channel:
+        ch_type = channel.split("/")[0]
+        options["X"] = _yamaha_channel_to_index(channel)
+    elif channel == "stereo_out":
+        ch_type = "St"
+        options["X"] = 0
     else:
-        conn_id = connection_map.get(conn_name, conn_name)
+        ch_type = "InCh"
+        options["X"] = 0
+
+    if feedback_name == "channel_muted":
+        def_id = f"MIXER:Current/{ch_type}/Fader/On"
+    else:
+        def_id = feedback_name
+
+    # Copy non-channel options
+    for k, v in yaml_options.items():
+        if k != "channel":
+            options[k] = v
+
+    return def_id, options
+
+
+def build_feedback(yaml_feedback, connection_map, connection_module_map=None):
+    """Map a YAML feedback to a Companion FeedbackEntityModel.
+
+    Uses MODULE_FEEDBACK_MAP to translate YAML symbolic feedback names
+    into actual Companion module feedback IDs.
+    """
+    conn_name = yaml_feedback.get("connection", "internal")
+    feedback_name = yaml_feedback.get("feedback", "")
+    yaml_options = yaml_feedback.get("options", {}) or {}
+
+    # Check MODULE_FEEDBACK_MAP for this feedback name
+    fb_mapping = MODULE_FEEDBACK_MAP.get(feedback_name)
+
+    if fb_mapping and fb_mapping.get("redirect_to_internal"):
+        # connection_status -> internal instance_status
+        conn_id = "internal"
+        def_id = fb_mapping["definitionId"]
+        # Set instance_id to the UUID of the original connection
+        options = {"instance_id": connection_map.get(conn_name, conn_name)}
+    elif fb_mapping:
+        # Module-specific feedback remap
+        if conn_name == "internal":
+            conn_id = "internal"
+        else:
+            conn_id = connection_map.get(conn_name, conn_name)
+
+        module = (connection_module_map or {}).get(conn_name, "")
+
+        if fb_mapping.get("definitionId") is None and module == "yamaha-rcp":
+            def_id, options = _yamaha_resolve_feedback(feedback_name, yaml_options)
+        else:
+            def_id = fb_mapping["definitionId"]
+            # Remap options if needed
+            fb_opt_map = FEEDBACK_OPTION_MAP.get(module, {})
+            options = _remap_options(yaml_options, fb_opt_map)
+
+            # ATEM: convert "black" input to 0
+            if module == "bmd-atem" and "input" in options:
+                if str(options["input"]).lower() == "black":
+                    options["input"] = 0
+    else:
+        # No mapping — pass through as-is
+        if conn_name == "internal":
+            conn_id = "internal"
+        else:
+            conn_id = connection_map.get(conn_name, conn_name)
+        def_id = feedback_name
+        options = dict(yaml_options)
 
     style, is_inverted = build_feedback_style(yaml_feedback)
 
     return {
         FIELD_MAP["action_type_key"]: FIELD_MAP["feedback_type_value"],
         FIELD_MAP["action_id_key"]: str(uuid.uuid4()),
-        FIELD_MAP["action_def_key"]: yaml_feedback.get("feedback", ""),
+        FIELD_MAP["action_def_key"]: def_id,
         FIELD_MAP["action_conn_key"]: conn_id,
         "headline": None,
-        FIELD_MAP["action_opts_key"]: yaml_feedback.get("options", {}),
+        FIELD_MAP["action_opts_key"]: options,
         "disabled": False,
         "upgradeIndex": None,
         "isInverted": is_inverted,
@@ -411,9 +843,12 @@ def build_feedback(yaml_feedback, connection_map):
     }
 
 
-def build_step(yaml_press_actions, connection_map, step_name=""):
+def build_step(yaml_press_actions, connection_map, connection_module_map=None, step_name=""):
     """Build a Companion step object from a list of press actions."""
-    actions = [build_action(a, connection_map) for a in (yaml_press_actions or [])]
+    actions = [
+        build_action(a, connection_map, connection_module_map)
+        for a in (yaml_press_actions or [])
+    ]
     return {
         "action_sets": {
             FIELD_MAP["press_key"]: actions,
@@ -426,11 +861,11 @@ def build_step(yaml_press_actions, connection_map, step_name=""):
     }
 
 
-def build_control(yaml_button, connection_map):
+def build_control(yaml_button, connection_map, connection_module_map=None):
     """Build a complete Companion button control from a YAML button definition."""
     style = build_button_style(yaml_button.get("style", {}))
     feedbacks = [
-        build_feedback(f, connection_map)
+        build_feedback(f, connection_map, connection_module_map)
         for f in yaml_button.get("feedbacks", [])
     ]
 
@@ -441,12 +876,12 @@ def build_control(yaml_button, connection_map):
     steps = {}
     press_actions = yaml_button.get("actions", {}).get("press", [])
     step1_id = str(uuid.uuid4())
-    steps[step1_id] = build_step(press_actions, connection_map, "")
+    steps[step1_id] = build_step(press_actions, connection_map, connection_module_map, "")
 
     if is_multistep:
         step2_actions = yaml_button.get("step_2_actions", {}).get("press", [])
         step2_id = str(uuid.uuid4())
-        steps[step2_id] = build_step(step2_actions, connection_map, "Confirm")
+        steps[step2_id] = build_step(step2_actions, connection_map, connection_module_map, "Confirm")
 
     # Button options
     options = {
@@ -480,9 +915,11 @@ def build_connections(yaml_connections, params=None):
     assignments and applies connection-specific settings. All module config
     fields are populated with defaults to ensure Companion can save connections.
 
-    Returns (instances_dict, connection_map).
+    Returns (instances_dict, connection_map, connection_module_map).
+    connection_module_map maps friendly connection id -> module name.
     """
     connection_map = {"internal": "internal"}
+    connection_module_map = {}
     instances = {}
 
     machines = params.get("machines", {}) if params else {}
@@ -504,6 +941,7 @@ def build_connections(yaml_connections, params=None):
 
         conn_uuid = str(uuid.uuid4())
         connection_map[conn_id] = conn_uuid
+        connection_module_map[conn_id] = module
 
         # Start with complete module defaults (all fields populated)
         module_info = MODULE_CONFIGS.get(module, {})
@@ -548,7 +986,7 @@ def build_connections(yaml_connections, params=None):
             "sortOrder": i,
         }
 
-    return instances, connection_map
+    return instances, connection_map, connection_module_map
 
 
 def build_custom_variables(yaml_variables):
@@ -567,7 +1005,7 @@ def build_custom_variables(yaml_variables):
     return result
 
 
-def build_page(yaml_page_data, connection_map):
+def build_page(yaml_page_data, connection_map, connection_module_map=None):
     """Build a complete Companion page from parsed YAML page data."""
     page_meta = yaml_page_data.get("page", {})
     page_name = page_meta.get("name", "Unnamed")
@@ -581,7 +1019,7 @@ def build_page(yaml_page_data, connection_map):
         if row not in controls:
             controls[row] = {}
 
-        controls[row][col] = build_control(button, connection_map)
+        controls[row][col] = build_control(button, connection_map, connection_module_map)
 
     return {
         "name": page_name,
@@ -1076,13 +1514,16 @@ def main():
     if args.verbose:
         print("Building Companion configuration...")
 
-    instances, connection_map = build_connections(yaml_connections, params)
+    instances, connection_map, connection_module_map = build_connections(
+        yaml_connections, params
+    )
 
     if args.verbose:
         print(f"  Built {len(instances)} connection instances")
         for friendly_id, comp_uuid in connection_map.items():
             if friendly_id != "internal":
-                print(f"    {friendly_id} -> {comp_uuid[:8]}...")
+                module = connection_module_map.get(friendly_id, "?")
+                print(f"    {friendly_id} -> {comp_uuid[:8]}... ({module})")
 
     custom_variables = build_custom_variables(yaml_variables)
 
@@ -1091,7 +1532,7 @@ def main():
     for page_file, page_data in pages_data:
         page_num = page_data.get("page", {}).get("number", 0)
         page_name = page_data.get("page", {}).get("name", "Unnamed")
-        page_result = build_page(page_data, connection_map)
+        page_result = build_page(page_data, connection_map, connection_module_map)
         pages_dict[str(page_num)] = page_result
 
         button_count = sum(len(cols) for cols in page_result["controls"].values())
